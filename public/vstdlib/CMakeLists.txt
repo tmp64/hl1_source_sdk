@@ -1,0 +1,10 @@
+add_sources(
+	CMakeLists.txt
+	cvar.h
+	ICommandline.h
+	IKeyValuesSystem.h
+	pch_vstdlib.h
+	random.h
+	strtools.h
+	vstdlib.h
+)

@@ -1,0 +1,9 @@
+add_sources(
+	CMakeLists.txt
+	Bitmap.h
+	Float_BM.h
+	ImageFormat.h
+	PSD.h
+	TGALoader.h
+	TGAWriter.h
+)
