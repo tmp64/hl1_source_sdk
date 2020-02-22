@@ -297,7 +297,7 @@ typedef void * HINSTANCE;
 	#ifdef _WIN32
 		#define EXPORT	_declspec( dllexport )
 	#else 
-		#define EXPORT	/* */
+		#define EXPORT	__attribute__((visibility("default")))
 	#endif
 #endif
 
