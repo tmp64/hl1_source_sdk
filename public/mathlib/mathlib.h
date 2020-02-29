@@ -320,12 +320,26 @@ FORCEINLINE void VectorAdd(const vec_t *a, const vec_t *b, vec_t *c)
 	c[1]=a[1]+b[1];
 	c[2]=a[2]+b[2];
 }
+
 FORCEINLINE void VectorCopy(const vec_t *a, vec_t *b)
 {
 	b[0]=a[0];
 	b[1]=a[1];
 	b[2]=a[2];
 }
+FORCEINLINE void VectorCopy(const vec_t *a, Vector &b)
+{
+	b[0] = a[0];
+	b[1] = a[1];
+	b[2] = a[2];
+}
+FORCEINLINE void VectorCopy(const Vector &a, vec_t *b)
+{
+	b[0] = a[0];
+	b[1] = a[1];
+	b[2] = a[2];
+}
+
 FORCEINLINE void VectorClear(vec_t *a)
 {
 	a[0]=a[1]=a[2]=0;

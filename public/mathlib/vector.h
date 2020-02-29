@@ -75,6 +75,13 @@ public:
 	Vector(vec_t X, vec_t Y, vec_t Z);
 	explicit Vector(vec_t XYZ); ///< broadcast initialize
 
+	inline Vector(float rgfl[3])
+	{
+		x = rgfl[0];
+		y = rgfl[1];
+		z = rgfl[2];
+	}
+
 	// Initialization
 	void Init(vec_t ix=0.0f, vec_t iy=0.0f, vec_t iz=0.0f);
 	 // TODO (Ilya): Should there be an init that takes a single float for consistency?
@@ -94,6 +101,10 @@ public:
 	// Cast to Vector2D...
 	Vector2D& AsVector2D();
 	const Vector2D& AsVector2D() const;
+
+	// Vectors will now automatically convert to float * when needed
+	FORCEINLINE operator float *() { return &x; }
+	FORCEINLINE operator const float *() const { return &x; }
 
 	// Initialization methods
 	void Random( vec_t minVal, vec_t maxVal );
