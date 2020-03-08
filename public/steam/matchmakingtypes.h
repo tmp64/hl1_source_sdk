@@ -20,6 +20,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <strtools.h>
 
 //
 // Max size (in bytes of UTF-8 data, not in characters) of server fields, including null terminator.
@@ -68,7 +69,7 @@ public:
 	servernetadr_t() : m_usConnectionPort( 0 ), m_usQueryPort( 0 ), m_unIP( 0 ) {}
 	
 	void	Init( unsigned int ip, uint16 usQueryPort, uint16 usConnectionPort );
-#ifdef NETADR_H
+#ifdef NETADR_SOURCE_H
 	netadr_t	GetIPAndQueryPort();
 #endif
 	
@@ -113,7 +114,7 @@ inline void	servernetadr_t::Init( unsigned int ip, uint16 usQueryPort, uint16 us
 	m_usConnectionPort = usConnectionPort;
 }
 
-#ifdef NETADR_H
+#ifdef NETADR_SOURCE_H
 inline netadr_t servernetadr_t::GetIPAndQueryPort()
 {
 	return netadr_t( m_unIP, m_usQueryPort );

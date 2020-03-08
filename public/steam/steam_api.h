@@ -576,6 +576,8 @@ inline bool CSteamAPIContext::Init()
 	if ( !m_pSteamUnifiedMessages )
 		return false;
 
+	// GoldSrc: older version of Steam API
+#if 0
 	m_pController = SteamClient()->GetISteamController( hSteamUser, hSteamPipe, STEAMCONTROLLER_INTERFACE_VERSION );
 	if ( !m_pController )
 		return false;
@@ -605,6 +607,7 @@ inline bool CSteamAPIContext::Init()
 	{
 		return false;
 	}
+#endif
 
 #ifdef _PS3
 	m_pSteamPS3OverlayRender = SteamClient()->GetISteamPS3OverlayRender();

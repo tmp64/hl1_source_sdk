@@ -18,8 +18,21 @@ else()
 	set( DLL_EXT_MACRO ".so" )
 endif()
 
+# Steam API
+if( SOURCE_SDK_NO_STEAM )
+	set( STEAM_API_DEFINES
+		NO_STEAM
+	)
+else()
+	find_package( steam_api MODULE REQUIRED )
+	set( STEAM_API_LIBRARIES
+		steam_api
+	)
+endif()
+
 set( SOURCE_SDK_DEFINES
 	${SOURCE_SDK_DEFINES}
+	${STEAM_API_DEFINES}
 	NO_MALLOC_OVERRIDE
 	_DLL_EXT=${DLL_EXT_MACRO}
 )
@@ -39,7 +52,6 @@ set( SOURCE_SDK_WARNING_LEVEL "")
 #-----------------------------------------------------------------
 find_package( tier0 MODULE REQUIRED )
 find_package( vstdlib MODULE REQUIRED )
-find_package( steam_api MODULE REQUIRED )
 
 #-----------------------------------------------------------------
 # Static libraries
@@ -56,6 +68,7 @@ set( SOURCE_SDK_INCLUDE_PATHS ${SOURCE_SDK_INCLUDE_PATHS} PARENT_SCOPE )
 
 set( SOURCE_SDK_LIBS
 	vgui_controls
+	${STEAM_API_LIBRARIES}
 	tier2
 	tier1
 	tier0

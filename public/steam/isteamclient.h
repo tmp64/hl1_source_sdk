@@ -201,12 +201,13 @@ public:
 	// Exposes the ISteamUnifiedMessages interface
 	virtual ISteamUnifiedMessages *GetISteamUnifiedMessages( HSteamUser hSteamuser, HSteamPipe hSteamPipe, const char *pchVersion ) = 0;
 
+	// GoldSrc: older version of Steam API than Source 2013
+#if 0
 	// Exposes the ISteamController interface
 	virtual ISteamController *GetISteamController( HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char *pchVersion ) = 0;
 
 	// Exposes the ISteamUGC interface
 	virtual ISteamUGC *GetISteamUGC( HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char *pchVersion ) = 0;
-
 	// returns app list interface, only available on specially registered apps
 	virtual ISteamAppList *GetISteamAppList( HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char *pchVersion ) = 0;
 	
@@ -229,10 +230,11 @@ public:
 
 	// Video
 	virtual ISteamVideo *GetISteamVideo( HSteamUser hSteamuser, HSteamPipe hSteamPipe, const char *pchVersion ) = 0;
+#endif
 };
 
 
-#define STEAMCLIENT_INTERFACE_VERSION		"SteamClient017"
+#define STEAMCLIENT_INTERFACE_VERSION		"SteamClient012"
 
 //-----------------------------------------------------------------------------
 // Purpose: Base values for callback identifiers, each callback must
