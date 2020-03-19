@@ -157,7 +157,7 @@ m_HideTooltip( this, &HTML::BrowserHideToolTip )
 	}
 	else
 	{
-		Warning("Unable to access SteamHTMLSurface");
+		Warning("Unable to access SteamHTMLSurface\n");
 	}
 	m_iScrollBorderX=m_iScrollBorderY=0;
 	m_bScrollBarEnabled = true;
@@ -1239,10 +1239,6 @@ void HTML::BrowserNeedsPaint( HTML_NeedsPaint_t *pCallback )
 		return;
 	}
 
-	// GoldSrc: VGUI here doesn't support texture updates.
-	// GoldSrc: TODO: Can be replaced with OpenGL
-	Assert(false);
-#if 0
 	// update the vgui texture
 	if ( m_bNeedsFullTextureUpload || m_iHTMLTextureID == 0  || tw != (int)pCallback->unWide || tt != (int)pCallback->unTall )
 	{
@@ -1253,20 +1249,19 @@ void HTML::BrowserNeedsPaint( HTML_NeedsPaint_t *pCallback )
 		// if the dimensions changed we also need to re-create the texture ID to support the overlay properly (it won't resize a texture on the fly, this is the only control that needs
 		//   to so lets have a tiny bit more code here to support that)
 		m_iHTMLTextureID = surface()->CreateNewTextureID( true );
-		surface()->DrawSetTextureRGBAEx( m_iHTMLTextureID, (const unsigned char *)pCallback->pBGRA, pCallback->unWide, pCallback->unTall, IMAGE_FORMAT_BGRA8888 );// BR FIXME - this call seems to shift by some number of pixels?
+		surface()->DrawSetTextureBGRA( m_iHTMLTextureID, (const unsigned char *)pCallback->pBGRA, pCallback->unWide, pCallback->unTall );// BR FIXME - this call seems to shift by some number of pixels?
 		m_allocedTextureWidth = pCallback->unWide;
 		m_allocedTextureHeight = pCallback->unTall;
 	}
 	else if ( (int)pCallback->unUpdateWide > 0 && (int)pCallback->unUpdateTall > 0 )
 	{
 		// same size texture, just bits changing in it, lets twiddle
-		surface()->DrawUpdateRegionTextureRGBA( m_iHTMLTextureID, pCallback->unUpdateX, pCallback->unUpdateY, (const unsigned char *)pCallback->pBGRA, pCallback->unUpdateWide, pCallback->unUpdateTall, IMAGE_FORMAT_BGRA8888 );
+		surface()->DrawUpdateRegionTextureBGRA( m_iHTMLTextureID, pCallback->unUpdateX, pCallback->unUpdateY, (const unsigned char *)pCallback->pBGRA, pCallback->unUpdateWide, pCallback->unUpdateTall );
 	}
 	else
 	{
-		surface()->DrawSetTextureRGBAEx( m_iHTMLTextureID, (const unsigned char *)pCallback->pBGRA,pCallback->unWide, pCallback->unTall, IMAGE_FORMAT_BGRA8888 );
+		surface()->DrawSetTextureBGRA(m_iHTMLTextureID, (const unsigned char *)pCallback->pBGRA, pCallback->unWide, pCallback->unTall);
 	}
-#endif
 
 	// need a paint next time
 	Repaint();
