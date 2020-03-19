@@ -4,8 +4,9 @@ set( TIER2_HEADER_FILES
 )
 
 set( TIER2_SOURCE_FILES
-	tier2.cpp
 	KeyValuesCompat.cpp
+	steam_client_017.cpp
+	tier2.cpp
 )
 
 add_library( tier2 STATIC

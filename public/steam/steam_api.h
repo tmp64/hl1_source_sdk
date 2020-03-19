@@ -89,6 +89,10 @@ S_API void S_CALLTYPE SteamAPI_SetMiniDumpComment( const char *pchMsg );
 // interface pointers, configured by SteamAPI_Init()
 S_API ISteamClient *S_CALLTYPE SteamClient();
 
+// SteamClient() returns ISteamClient012 which doesn't have GetISteamHTMLSurface used by
+// vgui2::HTML. SteamClient017() is implemented in tier2
+ISteamClient017 *SteamClient017();
+void InitSteamClient017();
 
 //
 // VERSION_SAFE_STEAM_API_INTERFACES is usually not necessary, but it provides safety against releasing
@@ -525,6 +529,8 @@ inline bool CSteamAPIContext::Init()
 	if ( !SteamClient() )
 		return false;
 
+	InitSteamClient017();
+
 	HSteamUser hSteamUser = SteamAPI_GetHSteamUser();
 	HSteamPipe hSteamPipe = SteamAPI_GetHSteamPipe();
 
@@ -577,37 +583,38 @@ inline bool CSteamAPIContext::Init()
 		return false;
 
 	// GoldSrc: older version of Steam API
-#if 0
-	m_pController = SteamClient()->GetISteamController( hSteamUser, hSteamPipe, STEAMCONTROLLER_INTERFACE_VERSION );
-	if ( !m_pController )
-		return false;
-
-	m_pSteamUGC = SteamClient()->GetISteamUGC( hSteamUser, hSteamPipe, STEAMUGC_INTERFACE_VERSION );
-	if ( !m_pSteamUGC )
-		return false;
-
-	m_pSteamAppList = SteamClient()->GetISteamAppList( hSteamUser, hSteamPipe, STEAMAPPLIST_INTERFACE_VERSION );
-	if ( !m_pSteamAppList )
-		return false;
-
-	m_pSteamMusic = SteamClient()->GetISteamMusic( hSteamUser, hSteamPipe, STEAMMUSIC_INTERFACE_VERSION );
-	if ( !m_pSteamMusic )
+	if (SteamClient017())
 	{
-		return false;
-	}
+		m_pController = SteamClient017()->GetISteamController(hSteamUser, hSteamPipe, STEAMCONTROLLER_INTERFACE_VERSION);
+		if (!m_pController)
+			return false;
 
-	m_pSteamMusicRemote = SteamClient()->GetISteamMusicRemote( hSteamUser, hSteamPipe, STEAMMUSICREMOTE_INTERFACE_VERSION );
-	if ( !m_pSteamMusicRemote )
-	{
-		return false;
-	}
+		m_pSteamUGC = SteamClient017()->GetISteamUGC(hSteamUser, hSteamPipe, STEAMUGC_INTERFACE_VERSION);
+		if (!m_pSteamUGC)
+			return false;
 
-	m_pSteamHTMLSurface = SteamClient()->GetISteamHTMLSurface( hSteamUser, hSteamPipe, STEAMHTMLSURFACE_INTERFACE_VERSION );
-	if ( !m_pSteamHTMLSurface )
-	{
-		return false;
+		m_pSteamAppList = SteamClient017()->GetISteamAppList(hSteamUser, hSteamPipe, STEAMAPPLIST_INTERFACE_VERSION);
+		if (!m_pSteamAppList)
+			return false;
+
+		m_pSteamMusic = SteamClient017()->GetISteamMusic(hSteamUser, hSteamPipe, STEAMMUSIC_INTERFACE_VERSION);
+		if (!m_pSteamMusic)
+		{
+			return false;
+		}
+
+		m_pSteamMusicRemote = SteamClient017()->GetISteamMusicRemote(hSteamUser, hSteamPipe, STEAMMUSICREMOTE_INTERFACE_VERSION);
+		if (!m_pSteamMusicRemote)
+		{
+			return false;
+		}
+
+		m_pSteamHTMLSurface = SteamClient017()->GetISteamHTMLSurface(hSteamUser, hSteamPipe, STEAMHTMLSURFACE_INTERFACE_VERSION);
+		if (!m_pSteamHTMLSurface)
+		{
+			return false;
+		}
 	}
-#endif
 
 #ifdef _PS3
 	m_pSteamPS3OverlayRender = SteamClient()->GetISteamPS3OverlayRender();
