@@ -877,7 +877,7 @@ void Button::ApplySettings( KeyValues *inResourceData )
 		SetReleasedSound(sound);
 	}
 
-	_activationType = (ActivationType_t)inResourceData->GetInt( "button_activation_type", ACTIVATE_ONRELEASED );
+	_activationType = (ActivationType_t)inResourceData->GetInt( "button_activation_type", ACTIVATE_ONPRESSEDANDRELEASED);
 }
 
 
