@@ -393,7 +393,7 @@ public:
 	virtual void OnSizeChanged(int newWide, int newTall);	// called after the size of a panel has been changed
 	
 	// called every frame if ivgui()->AddTickSignal() is called
-	virtual void OnTick();
+	MESSAGE_FUNC(OnTick, "Tick");
 
 	// input messages
 	MESSAGE_FUNC_INT_INT( OnCursorMoved, "OnCursorMoved", x, y );
