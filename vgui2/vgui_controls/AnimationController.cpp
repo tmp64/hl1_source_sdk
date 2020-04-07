@@ -1655,7 +1655,7 @@ char const *CPanelAnimationDictionary::StripNamespace( char const *className )
 {
 	if ( !Q_strnicmp( className, "vgui2::", 7 ) )
 	{
-		return className + 6;
+		return className + 7;
 	}
 	return className;
 }
