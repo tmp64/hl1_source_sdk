@@ -615,6 +615,8 @@ int RichText::DrawString(int iFirst, int iLast, TRenderState &renderState, HFont
 	int fontTall = surface()->GetFontTall(font);
 	// BUGBUG John: This won't exactly match the rendered size
 	int charWide = 0;
+
+	// calculate text width
 	for ( int i = iFirst; i <= iLast; i++ )
 	{
 		wchar_t ch = m_TextStream[i];
@@ -635,32 +637,70 @@ int RichText::DrawString(int iFirst, int iLast, TRenderState &renderState, HFont
 #endif
 	}
 
-	// draw selection, if any
 	int selection0 = -1, selection1 = -1;
 	GetSelectedRange(selection0, selection1);
+
+	int selection0_clamp = clamp(selection0, iFirst, iLast);
+	int selection1_clamp = clamp(selection1, iFirst, iLast + 1);
+
+	int selecCharWide = 0, textBeforeSelecCharWide = 0;
+
+	// calculate selection char width and text char width before the selection start
+	for ( int i = iFirst; i <= iLast; i++ )
+	{
+		wchar_t ch = m_TextStream[i];
+
+		if (i >= selection0 && i < selection1)
+			selecCharWide += surface()->GetCharacterWidth(font, ch);
+
+		if (selecCharWide == 0)
+			textBeforeSelecCharWide += surface()->GetCharacterWidth(font, ch);
+	}
+
+	int selectionExists = selecCharWide > 0 ? true : false;
 		
-	if (iFirst >= selection0 && iFirst < selection1)
+	// draw selection, if any
+	if (selectionExists)
 	{
 		// draw background selection color
 		surface()->DrawSetColor(_selectionColor);
-		surface()->DrawFilledRect(renderState.x, renderState.y, renderState.x + charWide, renderState.y + 1 + fontTall);
+		surface()->DrawFilledRect(renderState.x + textBeforeSelecCharWide, renderState.y, renderState.x + textBeforeSelecCharWide + selecCharWide, renderState.y + 1 + fontTall);
 		
-		// reset text color
-		surface()->DrawSetTextColor(_selectionTextColor);
 		m_bAllTextAlphaIsZero = false;
+
+		// Set text color
+		surface()->DrawSetTextColor(renderState.textColor);
+
+		// Draw text before selection
+		if (iFirst < selection0)
+		{
+			surface()->DrawSetTextPos(renderState.x, renderState.y);
+			surface()->DrawPrintText(&m_TextStream[iFirst], selection0_clamp - iFirst);
+		}
+
+		// Draw text after selection
+		if (selection1 <= iLast)
+		{
+			surface()->DrawSetTextPos(renderState.x + textBeforeSelecCharWide + selecCharWide, renderState.y);
+			surface()->DrawPrintText(&m_TextStream[selection1], iLast - selection1_clamp + 1);
+		}
+
+		// Draw selected text with selection color
+		surface()->DrawSetTextColor(_selectionTextColor);
+		surface()->DrawSetTextPos(renderState.x + textBeforeSelecCharWide, renderState.y);
+		surface()->DrawPrintText(&m_TextStream[selection0_clamp], selection1_clamp - selection0_clamp);
 	}
 	else
 	{
-		surface()->DrawSetTextColor(renderState.textColor);
+		if (renderState.textColor.a() != 0)
+		{
+			m_bAllTextAlphaIsZero = false;
+			surface()->DrawSetTextColor(renderState.textColor);
+			surface()->DrawSetTextPos(renderState.x, renderState.y);
+			surface()->DrawPrintText(&m_TextStream[iFirst], iLast - iFirst + 1);
+		}
 	}
-		
-	if ( renderState.textColor.a() != 0 )
-	{
-		m_bAllTextAlphaIsZero = false;
-		surface()->DrawSetTextPos(renderState.x, renderState.y);
-		surface()->DrawPrintText(&m_TextStream[iFirst], iLast - iFirst + 1);
-	}
-			
+
 	return charWide;
 }
 
