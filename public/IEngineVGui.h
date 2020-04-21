@@ -16,12 +16,6 @@
 #include "interface.h"
 #include "vgui/VGUI2.h"
 
-// Forward declarations.
-namespace vgui
-{
-	class Panel;
-};
-
 enum VGuiPanel_t
 {
 	PANEL_ROOT = 0,
