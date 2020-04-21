@@ -8559,6 +8559,12 @@ char const *CPanelMessageMapDictionary::StripNamespace( char const *className )
 	{
 		return className + 7;
 	}
+#ifdef SOURCE_SDK_VGUI_NS_ALIAS
+	else if ( !Q_strnicmp( className, "vgui::", 6 ) )
+	{
+		return className + 6;
+	}
+#endif
 	return className;
 }
 

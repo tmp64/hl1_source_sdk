@@ -66,5 +66,9 @@ const HFont INVALID_FONT = 0; // the value of an invalid font handle
 
 #include "vstdlib/strtools.h"
 
+#ifdef SOURCE_SDK_VGUI_NS_ALIAS
+namespace vgui = vgui2;
+#endif
+
 
 #endif // VGUI2_H

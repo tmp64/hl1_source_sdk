@@ -37,6 +37,14 @@ set( SOURCE_SDK_DEFINES
 	_DLL_EXT=${DLL_EXT_MACRO}
 )
 
+if( SOURCE_SDK_VGUI_NS_ALIAS )
+	# `namespace vgui = vgui2` for compatibility with large parts of Source SDK
+	set( SOURCE_SDK_DEFINES
+		${SOURCE_SDK_DEFINES}
+		SOURCE_SDK_VGUI_NS_ALIAS
+	)
+endif()
+
 set( SOURCE_SDK_INCLUDE_PATHS
 	${SOURCE_SDK_INCLUDE_PATHS}
 	${CMAKE_CURRENT_SOURCE_DIR}/common
