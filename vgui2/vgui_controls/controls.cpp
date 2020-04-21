@@ -6,6 +6,8 @@
 //===========================================================================//
 
 #include <tier0/dbg.h>
+#include <FileSystem.h>
+#include <KeyValues.h>
 #include <vgui/IScheme.h>
 #include <vgui_controls/Controls.h>
 #include <locale.h>
@@ -25,7 +27,68 @@ public:
 
 	virtual HScheme LoadSchemeFromFile(const char *fileName, const char *tag)
 	{
-		m_pEngineIface->LoadSchemeFromFile(fileName, tag);
+		/**
+		 * Since Source 2007 KeyValues support platform conditionals:
+		 *     "name" "Tahoma"  [!$OSX]
+		 *     "name" "Verdana" [$OSX]
+		 * GoldSource, however, does not, so schemes containing them will be parsed incorrectly.
+		 *
+		 * This LoadSchemeFromFile will load fileName, parse conditionals and save the file
+		 * as filename.res.i and load it with m_pEngineIface->LoadSchemeFromFile.
+		 *
+		 * It will only do that if file was changed since last time it was compiled.
+		 */
+
+		constexpr int SCHEME_VERSION = 1;
+
+		char fileNameComp[256];
+		snprintf(fileNameComp, sizeof(fileNameComp), "%s.i", fileName);
+
+		// Get orig file modification date
+		int origModDate = g_pFullFileSystem->GetFileTime(fileName);
+
+		// Try to open compiled file
+		bool bNeedRecompile = false;
+		KeyValues *compiled = new KeyValues("Scheme");
+		if (compiled->LoadFromFile(g_pFullFileSystem, fileNameComp))
+		{
+			// Check modification date and version
+			int modDate = compiled->GetInt("OrigModDate");
+			int version = compiled->GetInt("PreprocessorVersion", 0);
+			if (origModDate == 0 || modDate == 0 || origModDate != modDate || version != SCHEME_VERSION)
+				bNeedRecompile = true;
+		}
+		else
+		{
+			// Failed to open
+			bNeedRecompile = true;
+		}
+		compiled->deleteThis();
+
+		if (bNeedRecompile)
+		{
+			Msg("LoadSchemeFromFile: '%s' has changed, will be recompiled.\n", fileName);
+
+			// Load original file
+			KeyValuesAD orig(new KeyValues("Scheme"));
+			if (orig->LoadFromFile(g_pFullFileSystem, fileName))
+			{
+				// Set modification date and version
+				orig->SetInt("OrigModDate", origModDate);
+				orig->SetInt("PreprocessorVersion", SCHEME_VERSION);
+
+				// Save new file
+				orig->SaveToFile(g_pFullFileSystem, fileNameComp);
+			}
+			else
+			{
+				Error("LoadSchemeFromFile: Failed to open '%s'\n", fileName);
+				return 0;
+			}
+		}
+
+		// Load compiled file
+		return m_pEngineIface->LoadSchemeFromFile(fileNameComp, tag);
 	}
 
 	virtual void ReloadSchemes()
