@@ -49,7 +49,7 @@ public:
 	virtual Color GetColor(const char *colorName, Color defaultColor) = 0;
 };
 
-class ISchemeManager : public IBaseInterface
+class ISchemeManager009 : public IBaseInterface
 {
 public:
 	// loads a scheme from a file
@@ -92,9 +92,9 @@ public:
 	virtual int GetProportionalNormalizedValue( int scaledValue ) = 0;
 };
 
-// GoldSrc: These appear to not be available
-// GoldSrc: ISchemeManager009 is the ISchemeManager above
-#if 0
+// GoldSrc: These are not available in GoldSrc and are wrappers for corresponding function above
+// GoldSrc: They were added for compatibility for existing code.
+// GoldSrc: Do not use, use methods above instead.
 class ISchemeManager: public ISchemeManager009
 {
 public:
@@ -107,7 +107,6 @@ public:
 	virtual int GetProportionalNormalizedValueEx( HScheme scheme, int scaledValue ) = 0;
 
 };
-#endif
 
 /**
 *	Interface version used by GoldSource.
