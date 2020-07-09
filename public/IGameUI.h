@@ -26,6 +26,8 @@ public:
 	virtual int SetProgressBarStatusText(const char *statusText) = 0;
 	virtual void SetSecondaryProgressBar(float progress) = 0;
 	virtual void SetSecondaryProgressBarText(const char *statusText) = 0;
+	virtual void ValidateCDKey(bool, bool) = 0;
+	virtual void OnDisconnectFromServer(int eSteamLoginFailure, const char *username) = 0;
 };
 
 #define GAMEUI_INTERFACE_VERSION_GS "GameUI007"
