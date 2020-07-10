@@ -38,7 +38,7 @@
 #include "tier1/utldict.h"
 #include "tier1/utlbuffer.h"
 #include "mempool.h"
-#include "filesystem.h"
+#include "FileSystem.h"
 #include "tier0/icommandline.h"
 #include "filesystem_helpers.h"
 

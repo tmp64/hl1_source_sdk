@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -25,8 +25,8 @@
 #include <stdlib.h>
 #include "tier0/dbg.h"
 #include "tier0/mem.h"
-#include "UtlVector.h"
-#include "UtlBuffer.h"
+#include "utlvector.h"
+#include "utlbuffer.h"
 //#include "common/MinMax.h"
 
 // memdbgon must be the last include file in a .cpp file!!!

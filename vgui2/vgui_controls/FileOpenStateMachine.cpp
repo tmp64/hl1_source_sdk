@@ -11,7 +11,7 @@
 #include "vgui_controls/MessageBox.h"
 #include "vgui_controls/perforcefilelistframe.h"
 #include "vgui_controls/savedocumentquery.h"
-#include "filesystem.h"
+#include "FileSystem.h"
 #include "p4lib/ip4.h"
 #include "tier2/tier2.h"
 #include "tier0/icommandline.h"

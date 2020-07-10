@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <vgui/VGUI2.h>
-#include "tier1/UtlVector.h"
+#include "tier1/utlvector.h"
 
 #include "tier0/memdbgon.h"
 

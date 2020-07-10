@@ -4,7 +4,7 @@
 //
 //=====================================================================================//
 
-#include "filesystem.h"
+#include "FileSystem.h"
 #include "filesystem_helpers.h"
 #include "characterset.h"
 #include "strtools.h"

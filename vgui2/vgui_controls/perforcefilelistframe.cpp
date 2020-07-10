@@ -13,7 +13,7 @@
 #include "vgui_controls/MessageBox.h"
 #include "tier2/tier2.h"
 #include "p4lib/ip4.h"
-#include "filesystem.h"
+#include "FileSystem.h"
 #include "vgui/IVGui.h"
 
 // memdbgon must be the last include file in a .cpp file!!!

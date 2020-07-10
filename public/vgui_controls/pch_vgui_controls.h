@@ -22,7 +22,7 @@
 #include "tier0/valve_on.h"
 #include "tier0/memdbgon.h"
 
-#include "filesystem.h"
+#include "FileSystem.h"
 #include "tier0/validator.h"
 
 // vgui includes

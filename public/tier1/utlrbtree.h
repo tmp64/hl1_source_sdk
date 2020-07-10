@@ -9,6 +9,7 @@
 #ifndef UTLRBTREE_H
 #define UTLRBTREE_H
 
+#include <MinMax.h>
 #include "tier1/utlmemory.h"
 #include "tier1/utlfixedmemory.h"
 #include "tier1/utlblockmemory.h"
@@ -1355,7 +1356,7 @@ int CUtlRBTree<T, I, L, M>::Depth( I node ) const
 
 	int depthright = Depth( RightChild(node) );
 	int depthleft = Depth( LeftChild(node) );
-	return Max(depthright, depthleft) + 1;
+	return max(depthright, depthleft) + 1;
 }
 
 

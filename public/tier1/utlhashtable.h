@@ -41,6 +41,7 @@
 #define UTLHASHTABLE_H
 #pragma once
 
+#include <stdint.h>
 #include "utlcommon.h"
 #include "utlmemory.h"
 #include "mathlib/mathlib.h"
@@ -158,7 +159,7 @@ public:
 		: m_nUsed(0), m_nMinSize(max(8, minimumSize)), m_bSizeLocked(false), m_eq(), m_hash() { }
 
 	CUtlHashtable( int minimumSize, const KeyHashT &hash, KeyIsEqualT const &eq = KeyIsEqualT() )
-		: m_nUsed(0), m_nMinSize(MAX(8, minimumSize)), m_bSizeLocked(false), m_eq(eq), m_hash(hash) { }
+		: m_nUsed(0), m_nMinSize(max(8, minimumSize)), m_bSizeLocked(false), m_eq(eq), m_hash(hash) { }
 
 	CUtlHashtable( entry_t* pMemory, unsigned int nCount, const KeyHashT &hash = KeyHashT(), KeyIsEqualT const &eq = KeyIsEqualT() )
 		: m_nUsed(0), m_nMinSize(8), m_bSizeLocked(false), m_eq(eq), m_hash(hash) { SetExternalBuffer( pMemory, nCount ); }

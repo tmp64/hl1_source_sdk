@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: This header should never be used directly from leaf code!!!
 // Instead, just add the file memoverride.cpp into your project and all this
@@ -14,9 +14,10 @@
 #pragma once
 #endif
 
+#include <stddef.h>
+
 #if !defined(STEAM) && !defined(NO_MALLOC_OVERRIDE)
 
-#include <stddef.h>
 #include "tier0/mem.h"
 
 struct _CrtMemState;
@@ -296,19 +297,51 @@ struct MemAllocFileLine_t
 
 #define MEM_ALLOC_CREDIT_(tag)	((void)0)
 #define MEM_ALLOC_CREDIT()	MEM_ALLOC_CREDIT_(__FILE__)
+#define MEM_ALLOC_CREDIT_FUNCTION()
 #define MEM_ALLOC_CREDIT_CLASS()
 #define MEM_ALLOC_CLASSNAME(type) NULL
 
-#define MEM_ALLOC_CREDIT_(tag)	((void)0)
-#define MemAlloc_PushAllocDbgInfo( pszFile, line ) ((void)0)
-#define MemAlloc_PopAllocDbgInfo() ((void)0)
+#define MemAlloc_PushAllocDbgInfo( pszFile, line )
+#define MemAlloc_PopAllocDbgInfo()
 #define MemAlloc_RegisterAllocation( pFileName, nLine, nLogicalSize, nActualSize, nTime ) ((void)0)
 #define MemAlloc_RegisterDeallocation( pFileName, nLine, nLogicalSize, nActualSize, nTime ) ((void)0)
+#define MemAlloc_DumpStats() ((void)0)
+#define MemAlloc_CompactHeap() ((void)0)
+#define MemAlloc_OutOfMemory() ((void)0)
+#define MemAlloc_CompactIncremental() ((void)0)
+#define MemAlloc_DumpStatsFileBase( _filename ) ((void)0)
+inline bool MemAlloc_CrtCheckMemory() { return true; }
+inline void MemAlloc_GlobalMemoryStatus( size_t *pusedMemory, size_t *pfreeMemory )
+{
+    *pusedMemory = 0;
+    *pfreeMemory = 0;
+}
+#define MemAlloc_MemoryAllocFailed() 0
+
+#define MemAlloc_GetDebugInfoSize() 0
+#define MemAlloc_SaveDebugInfo( pvDebugInfo ) ((void)0)
+#define MemAlloc_RestoreDebugInfo( pvDebugInfo ) ((void)0)
+#define MemAlloc_InitDebugInfo( pvDebugInfo, pchRootFileName, nLine ) ((void)0)
+
+
 #define MEMALLOC_DEFINE_EXTERNAL_TRACKING( tag )
 #define MemAlloc_RegisterExternalAllocation( tag, p, size ) ((void)0)
 #define MemAlloc_RegisterExternalDeallocation( tag, p, size ) ((void)0)
 
 #endif //!STEAM && NO_MALLOC_OVERRIDE
+
+#ifdef POSIX
+#include <malloc.h>
+inline void *_aligned_malloc( size_t nSize, size_t align )															{ return memalign( align, nSize ); }
+inline void _aligned_free( void *ptr )																				{ free( ptr ); }
+
+inline void *MemAlloc_Alloc( size_t nSize, const char *pFileName = NULL, int nLine = 0 )							{ return malloc( nSize ); }
+inline void MemAlloc_Free( void *ptr, const char *pFileName = NULL, int nLine = 0 )									{ free( ptr ); }
+
+inline void *MemAlloc_AllocAligned( size_t size, size_t align, const char *pszFile = NULL, int nLine = 0  )	        { return memalign( align, size ); }
+inline void *MemAlloc_AllocAlignedFileLine( size_t size, size_t align, const char *pszFile = NULL, int nLine = 0 )	{ return memalign( align, size ); }
+inline void MemAlloc_FreeAligned( void *pMemBlock, const char *pszFile = NULL, int nLine = 0 ) 						{ free( pMemBlock ); }
+#endif
 
 //-----------------------------------------------------------------------------
 

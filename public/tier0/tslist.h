@@ -1,4 +1,4 @@
-//========== Copyright © 2005, Valve Corporation, All rights reserved. ========
+//========== Copyright ï¿½ 2005, Valve Corporation, All rights reserved. ========
 //
 // Purpose:
 //
@@ -41,8 +41,28 @@
 #define TSLIST_NODE_ALIGNMENT 4
 #endif
 
-#define TSLIST_HEAD_ALIGN __declspec(align(TSLIST_HEAD_ALIGNMENT))
-#define TSLIST_NODE_ALIGN __declspec(align(TSLIST_NODE_ALIGNMENT))
+#ifdef _MSC_VER
+#define TSLIST_HEAD_ALIGN DECL_ALIGN(TSLIST_HEAD_ALIGNMENT)
+#define TSLIST_NODE_ALIGN DECL_ALIGN(TSLIST_NODE_ALIGNMENT)
+#define TSLIST_HEAD_ALIGN_POST
+#define TSLIST_NODE_ALIGN_POST
+#elif defined( GNUC )
+#define TSLIST_HEAD_ALIGN
+#define TSLIST_NODE_ALIGN
+#define TSLIST_HEAD_ALIGN_POST DECL_ALIGN(TSLIST_HEAD_ALIGNMENT)
+#define TSLIST_NODE_ALIGN_POST DECL_ALIGN(TSLIST_NODE_ALIGNMENT)
+#elif defined( _PS3 )
+#define TSLIST_HEAD_ALIGNMENT 8
+#define TSLIST_NODE_ALIGNMENT 8
+
+#define TSLIST_HEAD_ALIGN ALIGN8
+#define TSLIST_NODE_ALIGN ALIGN8
+#define TSLIST_HEAD_ALIGN_POST ALIGN8_POST
+#define TSLIST_NODE_ALIGN_POST ALIGN8_POST
+
+#else
+#error
+#endif
 
 //-----------------------------------------------------------------------------
 // Lock free list.
@@ -55,7 +75,7 @@ typedef SLIST_HEADER TSLHead_t;
 struct TSLIST_NODE_ALIGN TSLNodeBase_t
 {
 	TSLNodeBase_t *Next; // name to match Windows
-};
+} TSLIST_NODE_ALIGN_POST;
 
 union TSLHead_t
 {
@@ -87,7 +107,7 @@ public:
 		void *operator new( size_t size, int nBlockUse, const char *pFileName, int nLine )	{ return operator new( size ); }
 		void operator delete( void *p )														{ if ( TSLIST_NODE_ALIGNMENT > 4 ) _aligned_free( p ); else free( p ); }
 		void operator delete( void *p, int nBlockUse, const char *pFileName, int nLine )	{ operator delete(p); }
-	};
+	} TSLIST_NODE_ALIGN_POST;
 
 	CTSList()
 	{
@@ -219,7 +239,7 @@ public:
 
 		Node_t *pNext;
 		T elem;
-	};
+	} TSLIST_NODE_ALIGN_POST;
 
 	union TSLIST_HEAD_ALIGN NodeLink_t
 	{

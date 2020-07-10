@@ -11,7 +11,7 @@
 #include <vgui_controls/ImageList.h>
 #include "tier1/KeyValues.h"
 #include <vgui/ISurface.h>
-#include "filesystem.h"
+#include "FileSystem.h"
 #include "p4lib/ip4.h"
 #include "tier2/tier2.h"
 

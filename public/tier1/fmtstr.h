@@ -163,7 +163,7 @@ public:
 
 	void SetLength( int nLength )
 	{
-		m_nLength = Min( nLength, SIZE_BUF - 1 );
+		m_nLength = min( nLength, SIZE_BUF - 1 );
 		m_szBuf[m_nLength] = '\0';
 	}
 

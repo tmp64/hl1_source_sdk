@@ -13,7 +13,7 @@
 #include <vgui_controls/Menu.h>
 #include <vgui_controls/MessageBox.h>
 
-#include "filesystem.h"
+#include "FileSystem.h"
 #include "../vgui2/src/vgui_key_translation.h"
 
 #undef PostMessage

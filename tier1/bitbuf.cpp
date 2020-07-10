@@ -6,6 +6,7 @@
 //
 //=============================================================================//
 
+#include <stdint.h>
 #include "bitbuf.h"
 #include "coordsize.h"
 #include "mathlib/vector.h"

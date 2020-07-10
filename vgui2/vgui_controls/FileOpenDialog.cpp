@@ -21,7 +21,7 @@
 #endif
 
 #undef GetCurrentDirectory
-#include "filesystem.h"
+#include "FileSystem.h"
 #include <sys/stat.h>
 
 #include "tier1/utldict.h"

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -274,12 +274,14 @@ typedef unsigned int DWORD;
 typedef unsigned short WORD;
 typedef void * HINSTANCE;
 #define _MAX_PATH PATH_MAX
+#define __cdecl
+#define __declspec
 #endif // defined(_WIN32) && !defined(WINDED)
 
  
 // Defines MAX_PATH
 #ifndef MAX_PATH
-#define MAX_PATH  260
+#define MAX_PATH  PATH_MAX
 #endif
 
 #define ALIGN_VALUE( val, alignment ) ( ( val + alignment - 1 ) & ~( alignment - 1 ) ) //  need macro for constant expression
@@ -463,7 +465,7 @@ typedef void * HINSTANCE;
 #else
 	#define  STDCALL
 	#define  FASTCALL 
-	#define  FORCEINLINE			__attribute__ ((always_inline))
+	#define  FORCEINLINE			__attribute__ ((always_inline)) inline
 	// GCC 3.4.1 has a bug in supporting forced inline of templated functions
 	// this macro lets us not force inlining in that case
 	#define  FORCEINLINE_TEMPLATE
@@ -531,6 +533,43 @@ typedef void * HINSTANCE;
 #pragma warning( disable : 4267 )	// conversion from 'size_t' to 'int', possible loss of data
 #pragma warning( disable : 4311 )	// pointer truncation from 'char *' to 'int'
 #pragma warning( disable : 4312 )	// conversion from 'unsigned int' to 'memhandle_t' of greater size
+#endif
+
+#ifdef POSIX
+#ifndef _stricmp
+#define _stricmp stricmp
+#endif
+#define strcmpi stricmp
+#define stricmp strcasecmp
+#define _vsnprintf vsnprintf
+#ifndef _alloca
+#define _alloca alloca
+#endif
+#ifdef _snprintf
+#undef _snprintf
+#endif
+#define _snprintf snprintf
+#define GetProcAddress dlsym
+#define _chdir chdir
+#ifndef _strnicmp
+#define _strnicmp strnicmp
+#endif
+#define strnicmp strncasecmp
+#define _getcwd getcwd
+#define _snwprintf swprintf
+#define swprintf_s swprintf
+#define wcsicmp _wcsicmp
+#define _wcsicmp wcscmp
+#define _finite finite
+#define _tempnam tempnam
+#define _unlink unlink
+#define _access access
+#define _mkdir(dir) mkdir( dir, S_IRWXU | S_IRWXG | S_IRWXO )
+#define _wtoi(arg) wcstol(arg, NULL, 10)
+#define _wtoi64(arg) wcstoll(arg, NULL, 10)
+
+typedef uint32 HMODULE;
+typedef void *HANDLE;
 #endif
 
 #ifndef WIN32

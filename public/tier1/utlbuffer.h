@@ -14,6 +14,7 @@
 #pragma once
 #endif
 
+#include <stdint.h>
 #include "tier1/utlmemory.h"
 #include "tier1/byteswap.h"
 #include <stdarg.h>

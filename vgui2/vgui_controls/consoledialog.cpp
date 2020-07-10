@@ -22,7 +22,7 @@
 #include "tier1/convar.h"
 #include "tier1/convar_serverbounded.h"
 #include "icvar.h"
-#include "filesystem.h"
+#include "FileSystem.h"
 
 #include <stdlib.h>
 

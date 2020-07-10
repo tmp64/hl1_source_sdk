@@ -18,6 +18,23 @@ else()
 	set( DLL_EXT_MACRO ".so" )
 endif()
 
+# Platform definitions
+if( UNIX )
+	set( PLATFORM_DEFINES
+		LINUX
+		_LINUX
+		GNUC
+		POSIX
+	)
+
+	if( APPLE )
+		set( PLATFORM_DEFINES
+			${PLATFORM_DEFINES}
+			OSX
+		)
+	endif()
+endif()
+
 # Steam API
 if( SOURCE_SDK_NO_STEAM )
 	set( STEAM_API_DEFINES
@@ -32,6 +49,7 @@ endif()
 
 set( SOURCE_SDK_DEFINES
 	${SOURCE_SDK_DEFINES}
+	${PLATFORM_DEFINES}
 	${STEAM_API_DEFINES}
 	NO_MALLOC_OVERRIDE
 	_DLL_EXT=${DLL_EXT_MACRO}

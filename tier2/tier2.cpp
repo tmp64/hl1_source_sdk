@@ -1,6 +1,6 @@
 #define TIER2_GAMEUI_INTERNALS
 
-#include <tier2\tier2.h>
+#include <tier2/tier2.h>
 #include <FileSystem.h>
 #include <IBaseUI.h>
 #include <IEngineVGui.h>

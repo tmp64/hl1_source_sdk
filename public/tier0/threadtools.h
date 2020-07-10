@@ -1,4 +1,4 @@
-//========== Copyright © 2005, Valve Corporation, All rights reserved. ========
+//========== Copyright ï¿½ 2005, Valve Corporation, All rights reserved. ========
 //
 // Purpose: A collection of utility classes to simplify thread handling, and
 //			as much as possible contain portability problems. Here avoiding 
@@ -499,6 +499,24 @@ public:
 private:
 	volatile uint32	m_ownerID;
 	volatile int	m_depth;
+};
+
+//-----------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------
+
+class CThreadNullMutex
+{
+public:
+    static void Lock()				{}
+    static void Unlock()			{}
+
+    static bool TryLock()			{ return true; }
+    static bool AssertOwnedByCurrentThread() { return true; }
+    static void SetTrace( bool b )	{}
+
+    static uint32 GetOwnerId() 		{ return 0;	}
+    static int	GetDepth() 			{ return 0; }
 };
 
 //-----------------------------------------------------------------------------
