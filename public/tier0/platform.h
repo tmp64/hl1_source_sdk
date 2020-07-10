@@ -267,6 +267,11 @@ FIXME: Enable this when we no longer fear change =)
 #define __i386__	1
 #endif
 
+// Defines MAX_PATH
+#ifndef MAX_PATH
+#define MAX_PATH  260
+#endif
+
 #elif POSIX
 #define _vsnprintf vsnprintf
 
@@ -276,13 +281,12 @@ typedef void * HINSTANCE;
 #define _MAX_PATH PATH_MAX
 #define __cdecl
 #define __declspec
-#endif // defined(_WIN32) && !defined(WINDED)
 
- 
 // Defines MAX_PATH
 #ifndef MAX_PATH
 #define MAX_PATH  PATH_MAX
 #endif
+#endif // defined(_WIN32) && !defined(WINDED)
 
 #define ALIGN_VALUE( val, alignment ) ( ( val + alignment - 1 ) & ~( alignment - 1 ) ) //  need macro for constant expression
 
