@@ -1354,44 +1354,49 @@ void SectionedListPanel::SetItemEnabled( int itemID, bool bEnabled )
 //-----------------------------------------------------------------------------
 void SectionedListPanel::SetSectionFgColor(int sectionID, Color color)
 {
-	if (!m_Sections.IsValidIndex(sectionID))
+	int index = FindSectionIndexByID(sectionID);
+	if (index < 0)
 		return;
 
-	m_Sections[sectionID].m_pHeader->SetColor(color);
+	m_Sections[index].m_pHeader->SetColor(color);
 }
 //-----------------------------------------------------------------------------
 // Purpose: added so you can change the divider color AFTER the main color.
 //-----------------------------------------------------------------------------
 void SectionedListPanel::SetSectionDividerColor( int sectionID, Color color)
 {
-	if (!m_Sections.IsValidIndex(sectionID))
+	int index = FindSectionIndexByID(sectionID);
+	if (index < 0)
 		return;
 
-	m_Sections[sectionID].m_pHeader->SetDividerColor(color);
+	m_Sections[index].m_pHeader->SetDividerColor(color);
 }
 //-----------------------------------------------------------------------------
 // Purpose: forces a section to always be visible
 //-----------------------------------------------------------------------------
 void SectionedListPanel::SetSectionAlwaysVisible(int sectionID, bool visible)
 {
-	if (!m_Sections.IsValidIndex(sectionID))
+	int index = FindSectionIndexByID(sectionID);
+	if (index < 0)
 		return;
 
-	m_Sections[sectionID].m_bAlwaysVisible = visible;
+	m_Sections[index].m_bAlwaysVisible = visible;
 }
 void SectionedListPanel::SetFontSection(int sectionID, HFont font)
 {
-	if (!m_Sections.IsValidIndex(sectionID))
+	int index = FindSectionIndexByID(sectionID);
+	if (index < 0)
 		return;
 
-	m_Sections[sectionID].m_pHeader->SetFont(font);
+	m_Sections[index].m_pHeader->SetFont(font);
 }
 void SectionedListPanel::SetSectionMinimumHeight(int sectionID, int iMinimumHeight)
 {
-	if (!m_Sections.IsValidIndex(sectionID))
+	int index = FindSectionIndexByID(sectionID);
+	if (index < 0)
 		return;
 
-	m_Sections[sectionID].m_iMinimumHeight = iMinimumHeight;
+	m_Sections[index].m_iMinimumHeight = iMinimumHeight;
 	InvalidateLayout();
 }
 
