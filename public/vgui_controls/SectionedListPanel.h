@@ -100,13 +100,13 @@ public:
 	virtual void SetItemEnabled( int itemID, bool bEnabled );
 
 	/* MESSAGES SENT:
-		"RowSelected"
+		"ItemSelected"
 			"itemID" - the selected item id, -1 if nothing selected
 
 		// when an item has been clicked on
-		"RowContextMenu"		"itemID"
-		"RowLeftClick"			"itemID"
-		"RowDoubleLeftClick"	"itemID"
+		"ItemContextMenu"		"itemID"
+		"ItemLeftClick"			"itemID"
+		"ItemDoubleLeftClick"	"itemID"
 	*/
 	
 	// returns the number of columns in a section
