@@ -28,6 +28,7 @@ struct label_colorchange_t
 {
 	Color	color;
 	int		textStreamIndex;
+	bool reset;
 };
 
 // Used to sort the color changes into sequential order.
@@ -58,6 +59,9 @@ public:
 	virtual void SetText(const char *text);
 	// sets unicode text directly
 	virtual void SetText(const wchar_t *text, bool bClearUnlocalizedSymbol = false);
+	// strips color codes, sets text and applies color codes.
+	// pColorCodes - array to 10 colors for color codes
+	virtual void SetColorCodedText(const char *text, Color *pColorCodes);
 	// get the full text in the image
 	virtual void GetText(char *buffer, int bufferSize);
 	virtual void GetText(wchar_t *buffer, int bufferLength);
@@ -102,6 +106,7 @@ public:
 	const wchar_t *GetUText( void ) { return _utext; }
 
 	void AddColorChange( Color col, int iTextStreamIndex );
+	void AddColorChangeReset( int iTextStreamIndex );
 	void SetColorChangeStream( CUtlSortVector<label_colorchange_t,CColorChangeListLess> *pUtlVecStream );
 	void ClearColorChangeStream( void ) { m_ColorChangeStream.Purge(); }
 

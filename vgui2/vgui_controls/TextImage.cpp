@@ -223,6 +223,46 @@ void TextImage::SetText(const wchar_t *unicode, bool bClearUnlocalizedSymbol)
 	m_bRecalculateTruncation = true;
 }
 
+void vgui2::TextImage::SetColorCodedText(const char *text, Color *pColorCodes)
+{
+	ClearColorChangeStream();
+
+	int rawLen = Q_strlen(text);
+	wchar_t *wbufin = new wchar_t[rawLen + 1];
+	wchar_t *wbuf = new wchar_t[rawLen + 1];
+
+	g_pVGuiLocalize->ConvertANSIToUnicode(text, wbufin, (rawLen + 1) * sizeof(wchar_t));
+
+	const wchar_t *pIn = wbufin;
+	wchar_t *pOut = wbuf;
+	int idx = 0;
+
+	while (*pIn != L'\0')
+	{
+		if (pIn[0] == L'^' && (pIn[1] >= L'0' && pIn[1] <= L'9'))
+		{
+			int code = pIn[1] - L'0';
+			if (code == 0 || code == 9)
+				AddColorChangeReset(idx);
+			else
+				AddColorChange(pColorCodes[code], idx);
+			pIn++;
+		}
+		else
+		{
+			*pOut = *pIn;
+			pOut++;
+			idx++;
+		}
+
+		pIn++;
+	}
+
+	*pOut = '\0';
+
+	SetText(wbuf, false);
+}
+
 //-----------------------------------------------------------------------------
 // Purpose: Gets the text in the textImage
 //-----------------------------------------------------------------------------
@@ -369,7 +409,10 @@ void TextImage::Paint()
 		{
 			if ( m_ColorChangeStream[iNextColorChange].textStreamIndex == (wsz - _utext) )
 			{
-				DrawSetTextColor( m_ColorChangeStream[iNextColorChange].color );
+				if (m_ColorChangeStream[iNextColorChange].reset)
+					DrawSetTextColor( GetColor() );
+				else
+					DrawSetTextColor( m_ColorChangeStream[iNextColorChange].color );
 				iNextColorChange++;
 			}
 		}
@@ -974,7 +1017,16 @@ void TextImage::AddColorChange( Color col, int iTextStreamIndex )
 	label_colorchange_t tmpChange;
 	tmpChange.color = col;
 	tmpChange.textStreamIndex = iTextStreamIndex;
+	tmpChange.reset = false;
 	m_ColorChangeStream.Insert( tmpChange );
+}
+
+void vgui2::TextImage::AddColorChangeReset(int iTextStreamIndex)
+{
+	label_colorchange_t tmpChange;
+	tmpChange.textStreamIndex = iTextStreamIndex;
+	tmpChange.reset = true;
+	m_ColorChangeStream.Insert(tmpChange);
 }
 
 void TextImage::SetColorChangeStream( CUtlSortVector<label_colorchange_t,CColorChangeListLess> *pUtlVecStream )
