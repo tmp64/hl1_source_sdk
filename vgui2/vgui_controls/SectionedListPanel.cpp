@@ -923,6 +923,7 @@ void SectionedListPanel::LayoutPanels(int &contentTall)
 		wide -= m_pScrollBar->GetWide();
 	}
     
+	int iLineSpacing = GetLineSpacing();
     int iStart = -1;
     int iEnd = -1;
 
@@ -986,7 +987,7 @@ void SectionedListPanel::LayoutPanels(int &contentTall)
 			for (int i = iStart; i <= iEnd; i++)
 			{
 				CItemButton *item = m_SortedItems[i]; //items[i];
-				item->SetBounds(x, y, wide, m_iLineSpacing);
+				item->SetBounds(x, y, wide, iLineSpacing);
 				
 				// setup edit mode
 				if (m_hEditModePanel.Get() && m_iEditModeItemID == item->GetID())
@@ -996,7 +997,7 @@ void SectionedListPanel::LayoutPanels(int &contentTall)
 					m_hEditModePanel->SetBounds(cx, y, cwide, tall);
 				}
 
-				y += m_iLineSpacing;
+				y += iLineSpacing;
 			}
 		}
 
@@ -1653,6 +1654,23 @@ void SectionedListPanel::MoveSelectionUp( void )
 	int newItemID = m_SortedItems[i - 1]->GetID();
 	SetSelectedItem(m_Items[newItemID]);
 	ScrollToItem(newItemID);
+}
+
+int vgui2::SectionedListPanel::GetLineSpacing()
+{
+	if (m_iLineSpacingOverride > 0)
+		return m_iLineSpacingOverride;
+	return m_iLineSpacing;
+}
+
+int vgui2::SectionedListPanel::GetLineSpacingOverride()
+{
+	return m_iLineSpacingOverride;
+}
+
+void vgui2::SectionedListPanel::SetLineSpacingOverride(int value)
+{
+	m_iLineSpacingOverride = value;
 }
 
 void SectionedListPanel::NavigateTo( void )

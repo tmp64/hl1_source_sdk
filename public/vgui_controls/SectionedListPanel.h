@@ -92,7 +92,6 @@ public:
 	//=============================================================================	 
 	virtual void SetItemBgColor( int itemID, Color color );
 	virtual int GetColumnIndexByName(int sectionID, char* name);
-	virtual int GetLineSpacing() { return m_iLineSpacing; }
 	//=============================================================================
 	// HPE_END
 	//=============================================================================
@@ -212,6 +211,10 @@ public:
 
 	ScrollBar *GetScrollBar( void ) { return m_pScrollBar; }
 
+	int GetLineSpacing();
+	int GetLineSpacingOverride();
+	void SetLineSpacingOverride(int value); // Set to 0 to restore default
+
 protected:
 	virtual void PerformLayout();
 	virtual void ApplySchemeSettings(IScheme *pScheme);
@@ -266,6 +269,7 @@ private:
 	int m_iEditModeColumn;
 	int m_iContentHeight;
 	int m_iLineSpacing;
+	int m_iLineSpacingOverride = 0;
 	int m_iSectionGap;
 
 	int FindSectionIndexByID(int sectionID);
