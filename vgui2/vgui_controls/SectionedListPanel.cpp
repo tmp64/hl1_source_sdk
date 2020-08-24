@@ -495,6 +495,12 @@ public:
 		ClearImages();
 	}
 
+	virtual void SetPaintBackgroundEnabled(bool state) override
+	{
+		BaseClass::SetPaintBackgroundEnabled(state);
+		m_bPaintBg = state;
+	}
+
 	virtual void PaintBackground()
 	{
 		int wide, tall;
@@ -613,7 +619,7 @@ public:
                 RequestFocus();
             }
 			m_bSelected = state;
-			SetPaintBackgroundEnabled( state );
+			BaseClass::SetPaintBackgroundEnabled( state || m_bPaintBg );
 			InvalidateLayout();
 			Repaint();
 		}
@@ -749,6 +755,7 @@ private:
 	bool m_bSelected;
 	bool m_bOverrideColors;
 	bool m_bShowColumns;
+	bool m_bPaintBg = false;
 };
 
 }; // namespace vgui2
