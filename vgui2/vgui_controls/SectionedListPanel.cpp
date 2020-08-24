@@ -375,7 +375,10 @@ public:
 					TextImage *textImage = dynamic_cast<TextImage *>(GetImageAtIndex(i));
 					if (textImage)
 					{
-						textImage->SetText(m_pData->GetString(keyname, ""));
+						if (columnFlags & SectionedListPanel::COLUMN_COLORED)
+							textImage->SetColorCodedText(m_pData->GetString(keyname, ""), GetColorCodeArray());
+						else
+							textImage->SetText(m_pData->GetString(keyname, ""));
 						textImage->ResizeImageToContentMaxWidth( maxWidth );
 
 						// set the text color based on the selection state - if one of the children of the SectionedListPanel has focus, then 'we have focus' if we're selected
