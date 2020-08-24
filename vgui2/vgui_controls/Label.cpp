@@ -33,6 +33,21 @@ using namespace vgui2;
 
 DECLARE_BUILD_FACTORY_DEFAULT_TEXT( Label, Label );
 
+static Color s_DefaultColorCodeArray[10] = {
+	Color(255, 255, 255, 255),
+	Color(255, 255, 255, 255),
+	Color(255, 255, 255, 255),
+	Color(255, 255, 255, 255),
+	Color(255, 255, 255, 255),
+	Color(255, 255, 255, 255),
+	Color(255, 255, 255, 255),
+	Color(255, 255, 255, 255),
+	Color(255, 255, 255, 255),
+	Color(255, 255, 255, 255)
+};
+
+Color *Label::m_sColorCodeArray = s_DefaultColorCodeArray;
+
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 //-----------------------------------------------------------------------------
@@ -325,6 +340,22 @@ void Label::SetText(const wchar_t *unicodeString, bool bClearUnlocalizedSymbol)
 	SetHotkey(CalculateHotkey(unicodeString));
 
     InvalidateLayout();     // possible that the textimage needs to expand
+	Repaint();
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Parse color codes and set text
+//-----------------------------------------------------------------------------
+void vgui2::Label::SetColorCodedText(const char *text)
+{
+	m_bAutoWideDirty = m_bAutoWideToContents;
+
+	_textImage->SetColorCodedText(text, GetColorCodeArray());
+
+	//!! need to calculate hotkey from translated string
+	SetHotkey(CalculateHotkey(_textImage->GetUText()));
+
+	InvalidateLayout(); // possible that the textimage needs to expand
 	Repaint();
 }
 
@@ -1373,6 +1404,24 @@ void Label::SetAllCaps( bool bAllCaps )
 	_textImage->SetAllCaps( m_bAllCaps );
 
 	InvalidateLayout();
+}
+
+Color *vgui2::Label::GetColorCodeArray()
+{
+	if (m_pColorCodeArray)
+		return m_pColorCodeArray;
+	else
+		return m_sColorCodeArray;
+}
+
+void vgui2::Label::SetColorCodeArray(Color *pArray)
+{
+	m_pColorCodeArray = pArray;
+}
+
+void vgui2::Label::SetDefaultColorCodeArray(Color *pArray)
+{
+	m_sColorCodeArray = pArray;
 }
 
 void Label::HandleAutoSizing( void )

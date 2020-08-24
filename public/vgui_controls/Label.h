@@ -41,6 +41,9 @@ public:
 	// Set unicode text directly
 	virtual void SetText(const wchar_t *unicodeString, bool bClearUnlocalizedSymbol = false );
 
+	// Strip color codes, set text and apply color codes.
+	virtual void SetColorCodedText(const char *text);
+
 	// Get the current text
 	virtual void GetText(OUT_Z_BYTECAP(bufferLen) char *textOut, int bufferLen);
 	virtual void GetText(OUT_Z_BYTECAP(bufLenInBytes) wchar_t *textOut, int bufLenInBytes);
@@ -156,6 +159,15 @@ public:
 
 	void SetAllCaps( bool bAllCaps );
 
+	// Returns array of 10 colors that is used for color codes.
+	Color *GetColorCodeArray();
+
+	// Sets a new color code array. nullptr resets to default one.
+	void SetColorCodeArray(Color *pArray);
+
+	// Sets default color code array. Affects all labels.
+	static void SetDefaultColorCodeArray(Color *pArray);
+
 protected:
 	virtual void PerformLayout();
 	virtual wchar_t CalculateHotkey(const char *text);
@@ -218,6 +230,9 @@ private:
 	bool	m_bAutoWideDirty;
 	bool	m_bUseProportionalInsets;
 
+	Color *m_pColorCodeArray = nullptr;
+
+	static Color *m_sColorCodeArray;
 };
 
 } // namespace vgui2
