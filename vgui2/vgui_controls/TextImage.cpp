@@ -261,6 +261,9 @@ void vgui2::TextImage::SetColorCodedText(const char *text, Color *pColorCodes)
 	*pOut = '\0';
 
 	SetText(wbuf, false);
+
+	delete[] wbufin;
+	delete[] wbuf;
 }
 
 //-----------------------------------------------------------------------------
