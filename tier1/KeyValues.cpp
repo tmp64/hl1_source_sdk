@@ -1098,7 +1098,7 @@ const char *KeyValues::GetString( const char *keyName, const char *defaultValue 
 			SetString( keyName, buf );
 			break;
 		case TYPE_UINT64:
-			Q_snprintf( buf, sizeof( buf ), "%I64i", *((uint64 *)(dat->m_pszValue)) );
+			Q_snprintf( buf, sizeof( buf ), "%llu", *((uint64 *)(dat->m_pszValue)) );
 			SetString( keyName, buf );
 			break;
 
