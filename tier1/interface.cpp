@@ -244,6 +244,9 @@ CSysModule *Sys_LoadModule( const char *pModuleName, Sys_Flags flags /* = SYS_NO
 
 		char szAbsoluteModuleName[1024];
 		size_t cCwd = strlen( szCwd );
+
+#if 0
+        // GoldSrc: Source keeps DLLs in bin subdir, GoldSrc doesn't.
 		if ( strstr( pModuleName, "bin/") == pModuleName || ( szCwd[ cCwd - 1 ] == 'n'  && szCwd[ cCwd - 2 ] == 'i' && szCwd[ cCwd - 3 ] == 'b' )  )
 		{
 			// don't make bin/bin path
@@ -253,6 +256,8 @@ CSysModule *Sys_LoadModule( const char *pModuleName, Sys_Flags flags /* = SYS_NO
 		{
 			Q_snprintf( szAbsoluteModuleName, sizeof(szAbsoluteModuleName), "%s/bin/%s", szCwd, pModuleName );
 		}
+#endif
+        Q_snprintf( szAbsoluteModuleName, sizeof(szAbsoluteModuleName), "%s/%s", szCwd, pModuleName );
 		hDLL = Sys_LoadLibrary( szAbsoluteModuleName, flags );
 	}
 
