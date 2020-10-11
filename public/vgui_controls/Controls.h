@@ -30,6 +30,13 @@ namespace vgui2
 // moduleName should be the name of the module that this instance of the vgui_controls has been compiled into
 bool VGui_InitInterfacesList( const char *moduleName, CreateInterfaceFn *factoryList, int numFactories );
 
+/**
+ * Returns default scheme that should be used by any panels created in this module.
+ * Must be implemented by any module that links with vgui_controls.
+ * Basic implementation can return 0.
+ */
+HScheme VGui_GetDefaultScheme();
+
 // returns the name of the module as specified above
 const char *GetControlsModuleName();
 

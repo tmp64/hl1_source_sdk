@@ -702,7 +702,7 @@ void Panel::Init( int x, int y, int wide, int tall )
 	_border = NULL;
 	_buildGroup = UTLHANDLE_INVALID;
 	_tabPosition = 0;
-	m_iScheme = 0;
+	m_iScheme = VGui_GetDefaultScheme();
 	m_bIsSilent = false;
 	m_bParentNeedsCursorMoveEvents = false;
 
