@@ -6,6 +6,15 @@
 #include "vgui/IInput.h"
 
 /**
+ * Type for engine keys.
+ * It uses ASCII for most keys and defines for others.
+ * A-Z use lowercase ASCII.
+ * Mouse buttons are also defines.
+ * @see keydefs.h
+ */
+using EngineKey = int;
+
+/**
 *	Represents a single video mode.
 */
 struct vmode_t
@@ -34,13 +43,13 @@ public:
 	*	@param iKeyNum Key ID.
 	*	@return The name of the given key code.
 	*/
-	virtual const char* Key_NameForKey( vgui2::KeyCode iKeyNum ) = 0;
+	virtual const char* Key_NameForKey( EngineKey iKeyNum ) = 0;
 
 	/**
 	*	@param iKeyNum Key code.
 	*	@return String that is executed when the key is pressed, or an empty string if it isn't bound.
 	*/
-	virtual const char* Key_BindingForKey( vgui2::KeyCode iKeyNum ) = 0;
+	virtual const char* Key_BindingForKey( EngineKey iKeyNum ) = 0;
 
 	/**
 	*	@param pszBind Binding to look up the key for.
@@ -84,7 +93,7 @@ public:
 	/**
 	*	@return Key code of a given key name. Returns -1 if the key doesn't exist.
 	*/
-	virtual vgui2::KeyCode Key_KeyStringToKeyNum( const char* pszKeyName ) = 0;
+	virtual EngineKey Key_KeyStringToKeyNum( const char* pszKeyName ) = 0;
 };
 
 /**
