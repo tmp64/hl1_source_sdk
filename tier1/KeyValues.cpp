@@ -1923,7 +1923,7 @@ bool KeyValues::LoadFromBuffer( char const *resourceName, CUtlBuffer &buf, IBase
 //-----------------------------------------------------------------------------
 bool KeyValues::LoadFromBuffer( char const *resourceName, const char *pBuffer, IBaseFileSystem* pFileSystem, const char *pPathID )
 {
-	if ( !pBuffer )
+	if ( !pBuffer || !pBuffer[0])
 		return true;
 
 	int nLen = Q_strlen( pBuffer );
