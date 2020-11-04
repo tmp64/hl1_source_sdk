@@ -1150,8 +1150,8 @@ void Label::GetSettings( KeyValues *outResourceData )
 		outResourceData->SetInt("textinsetx", _textInset[0]);
 		outResourceData->SetInt("textinsety", _textInset[1]);
 	}
-	outResourceData->SetInt("auto_wide_tocontents", ( m_bAutoWideToContents ? 1 : 0 ));
-	outResourceData->SetInt("use_proportional_insets", ( m_bUseProportionalInsets ? 1 : 0 ));
+	outResourceData->SetInt("autowidetocontents", ( m_bAutoWideToContents ? 1 : 0 ));
+	outResourceData->SetInt("useproportionalinsets", ( m_bUseProportionalInsets ? 1 : 0 ));
 }
 
 //-----------------------------------------------------------------------------
@@ -1273,7 +1273,7 @@ void Label::ApplySettings( KeyValues *inResourceData )
 	bool bWrapText = inResourceData->GetInt("centerwrap", 0) > 0;
 	SetCenterWrap( bWrapText );
 
-	m_bAutoWideToContents = inResourceData->GetInt("auto_wide_tocontents", 0) > 0;
+	m_bAutoWideToContents = inResourceData->GetInt("autowidetocontents", 0) > 0;
 
 	bWrapText = inResourceData->GetInt("wrap", 0) > 0;
 	SetWrap( bWrapText );
@@ -1281,7 +1281,7 @@ void Label::ApplySettings( KeyValues *inResourceData )
 	int inset_x = inResourceData->GetInt("textinsetx", _textInset[0]);
 	int inset_y = inResourceData->GetInt("textinsety", _textInset[1]);
 	// Had to play it safe and add a new key for backwards compatibility
-	m_bUseProportionalInsets = inResourceData->GetInt("use_proportional_insets", 0) > 0;
+	m_bUseProportionalInsets = inResourceData->GetInt("useproportionalinsets", 0) > 0;
 	if ( m_bUseProportionalInsets )
 	{
 		inset_x = scheme()->GetProportionalScaledValue( inset_x );
@@ -1301,7 +1301,10 @@ void Label::ApplySettings( KeyValues *inResourceData )
 const char *Label::GetDescription( void )
 {
 	static char buf[1024];
-	Q_snprintf(buf, sizeof(buf), "%s, string labelText, string associate, alignment textAlignment, int wrap, int dulltext, int brighttext, string font", BaseClass::GetDescription());
+	Q_snprintf(buf, sizeof(buf), "%s, string labelText, string associate, "
+		"alignment textAlignment, int dulltext, int brighttext, string font, "
+		"int wrap, int centerwrap, int textinsetx, int textinsety, int autowidetocontents, "
+		"int useproportionalinsets", BaseClass::GetDescription());
 	return buf;
 }
 
