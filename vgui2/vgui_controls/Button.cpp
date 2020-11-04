@@ -859,7 +859,8 @@ void Button::ApplySettings( KeyValues *inResourceData )
 		m_bSelectionStateSaved = true;
 	}
 
-	m_bStaySelectedOnClick = inResourceData->GetBool( "stayselectedonclick", false );
+	// Not saved into res file so don't load
+	//m_bStaySelectedOnClick = inResourceData->GetBool( "stayselectedonclick", false );
 
 	const char *sound = inResourceData->GetString("sound_armed", "");
 	if (*sound)
@@ -877,7 +878,8 @@ void Button::ApplySettings( KeyValues *inResourceData )
 		SetReleasedSound(sound);
 	}
 
-	_activationType = (ActivationType_t)inResourceData->GetInt( "button_activation_type", ACTIVATE_ONPRESSEDANDRELEASED);
+	// Not saved into res file so don't load
+	//_activationType = (ActivationType_t)inResourceData->GetInt( "button_activation_type", ACTIVATE_ONPRESSEDANDRELEASED);
 }
 
 
