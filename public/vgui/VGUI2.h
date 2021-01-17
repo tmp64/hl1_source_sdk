@@ -12,8 +12,6 @@
 #pragma once
 #endif
 
-#define null 0L
-
 #ifndef NULL
 #ifdef __cplusplus
 #define NULL    0

@@ -70,7 +70,7 @@ BuildGroup::BuildGroup(Panel *parentPanel, Panel *contextPanel)
 	_cursor_sizewe = dc_sizewe;
 	_cursor_sizens = dc_sizens;
 	_cursor_sizeall = dc_sizeall;
-	_currentPanel=null;
+	_currentPanel = nullptr;
 	_dragging=false;
 	m_pResourceName=NULL;
 	m_pResourcePathID = NULL;
@@ -521,7 +521,7 @@ bool BuildGroup::MouseReleased(MouseCode code, Panel *panel)
 	Assert(panel);
 
 	_dragging=false;
-	input()->SetMouseCapture(null);
+	input()->SetMouseCapture(NULL_HANDLE);
 	return true;
 }
 

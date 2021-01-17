@@ -1203,7 +1203,7 @@ void Panel::PaintTraverse( bool repaint, bool allowForce )
 	constexpr bool bBorderPaintFirst = false;
 
 	// draw the border first if requested to
-	if ( bBorderPaintFirst && repaint && _flags.IsFlagSet( PAINT_BORDER_ENABLED ) && ( _border != null ) )
+	if ( bBorderPaintFirst && repaint && _flags.IsFlagSet( PAINT_BORDER_ENABLED ) && ( _border != nullptr ) )
 	{
 		// Paint the border over the background with no inset
 		surface()->PushMakeCurrent( vpanel, false );
@@ -1260,7 +1260,7 @@ void Panel::PaintTraverse( bool repaint, bool allowForce )
 	// draw the border last
 	if ( repaint )
 	{
-		if ( !bBorderPaintFirst && _flags.IsFlagSet( PAINT_BORDER_ENABLED ) && ( _border != null ) )
+		if ( !bBorderPaintFirst && _flags.IsFlagSet( PAINT_BORDER_ENABLED ) && ( _border != nullptr ) )
 		{
 			// Paint the border over the background with no inset
 			surface()->PushMakeCurrent( vpanel, false );
@@ -3295,7 +3295,7 @@ VPANEL Panel::IsWithinTraverse(int x, int y, bool traversePopups)
 			if (ipanel()->IsPopup(panel))
 			{
 				panel = ipanel()->IsWithinTraverse(panel, x, y, true);
-				if (panel != null)
+				if (panel != NULL_HANDLE)
 				{
 					return panel;
 				}
@@ -3736,7 +3736,7 @@ void Panel::GetInset(int& left,int& top,int& right,int& bottom)
 void Panel::GetPaintSize(int& wide,int& tall)
 {
 	GetSize(wide, tall);
-	if (_border != null)
+	if (_border != nullptr)
 	{
 		int left,top,right,bottom;
 		_border->GetInset(left,top,right,bottom);
