@@ -144,6 +144,9 @@ public:
 				orig->SetInt("PreprocessorVersion", SCHEME_VERSION);
 
 				// Save new file
+				char dir[256];
+				V_ExtractFilePath(fileName, dir, sizeof(dir));
+				g_pFullFileSystem->CreateDirHierarchy(dir, pathID);
 				orig->SaveToFile(g_pFullFileSystem, fileNameComp, pathID);
 			}
 			else
