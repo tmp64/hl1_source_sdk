@@ -94,18 +94,22 @@ public:
 
 // GoldSrc: These are not available in GoldSrc and are wrappers for corresponding function above
 // GoldSrc: They were added for compatibility for existing code.
-// GoldSrc: Do not use, use methods above instead.
+// GoldSrc: Except LoadSchemeFromFilePath with pathID, It's new. Use it instead of LoadSchemeFromFile
 class ISchemeManager: public ISchemeManager009
 {
 public:
 	// loads a scheme from a file
 	// first scheme loaded becomes the default scheme, and all subsequent loaded scheme are derivitives of that
-	virtual HScheme LoadSchemeFromFileEx( VPANEL sizingPanel, const char *fileName, const char *tag) = 0;
+	[[deprecated]] virtual HScheme LoadSchemeFromFileEx(VPANEL sizingPanel, const char *fileName, const char *tag) = 0;
+
 	// gets the proportional coordinates for doing screen-size independant panel layouts
 	// use these for font, image and panel size scaling (they all use the pixel height of the display for scaling)
-	virtual int GetProportionalScaledValueEx( HScheme scheme, int normalizedValue ) = 0;
-	virtual int GetProportionalNormalizedValueEx( HScheme scheme, int scaledValue ) = 0;
+	[[deprecated]] virtual int GetProportionalScaledValueEx(HScheme scheme, int normalizedValue) = 0;
+	[[deprecated]] virtual int GetProportionalNormalizedValueEx(HScheme scheme, int scaledValue) = 0;
 
+	// Use this one instead of LoadSchemeFromFile without pathID
+	// Path must be writable. See LoadSchemeFromFilePath in vgui/vgui_controls/controls.cpp.
+	virtual HScheme LoadSchemeFromFilePath(const char *fileName, const char *pathID, const char *tag) = 0;
 };
 
 /**
