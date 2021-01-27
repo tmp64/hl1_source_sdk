@@ -1194,7 +1194,9 @@ HTML::CHTMLFindBar::CHTMLFindBar( HTML *parent ) : EditablePanel( parent, "FindB
 	m_pFindBar->SendNewLine( true );
 	m_pFindCountLabel = new Label( this, "FindCount", "" );
 	m_pFindCountLabel->SetVisible( false );
-	LoadControlSettings( "resource/layout/htmlfindbar.layout" );
+
+	// BUG: This file is not included with Source SDK or Source games.
+	// LoadControlSettings( "resource/layout/htmlfindbar.layout" );
 }
 
 
