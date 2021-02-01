@@ -192,13 +192,23 @@ bool CSHA1::HashFile(char *szFileName)
 
 	for(i = 0; i < ulBlocks; i++)
 	{
-		fread(uData, 1, MAX_FILE_READ_BUFFER, fIn);
+		if (fread(uData, 1, MAX_FILE_READ_BUFFER, fIn) != MAX_FILE_READ_BUFFER)
+		{
+			fclose(fIn);
+			return false;
+		}
+
 		Update(uData, MAX_FILE_READ_BUFFER);
 	}
 
 	if(ulRest != 0)
 	{
-		fread(uData, 1, ulRest, fIn);
+		if (fread(uData, 1, ulRest, fIn) != ulRest)
+		{
+			fclose(fIn);
+			return false;
+		}
+
 		Update(uData, ulRest);
 	}
 

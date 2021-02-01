@@ -865,11 +865,11 @@ void FileOpenDialog::OnOpenInExplorer()
 #elif defined( OSX )
 	char szCmd[ MAX_PATH * 2];
 	Q_snprintf( szCmd, sizeof(szCmd), "/usr/bin/open \"%s\"", pCurrentDirectory );
-	::system( szCmd );
+	[[maybe_unused]] int result = ::system( szCmd );
 #elif defined( LINUX )
 	char szCmd[ MAX_PATH * 2 ];	
 	Q_snprintf( szCmd, sizeof(szCmd), "xdg-open \"%s\" &", pCurrentDirectory );
-	::system( szCmd );
+	[[maybe_unused]] int result = ::system( szCmd );
 #endif
 }
 
