@@ -225,40 +225,42 @@ CSysModule *Sys_LoadModule( const char *pModuleName, Sys_Flags flags /* = SYS_NO
 	char szCwd[1024];
 	HMODULE hDLL = NULL;
 
-	if ( !Q_IsAbsolutePath( pModuleName ) )
+	if (!Q_IsAbsolutePath(pModuleName))
 	{
 		// full path wasn't passed in, using the current working dir
-		_getcwd( szCwd, sizeof( szCwd ) );
-		if ( IsX360() )
+		if (_getcwd( szCwd, sizeof( szCwd )))
 		{
-			int i = CommandLine()->FindParm( "-basedir" );
-			if ( i )
+			if (IsX360())
 			{
-				V_strcpy_safe( szCwd, CommandLine()->GetParm( i + 1 ) );
+				int i = CommandLine()->FindParm("-basedir");
+				if (i)
+				{
+					V_strcpy_safe(szCwd, CommandLine()->GetParm(i + 1));
+				}
 			}
-		}
-		if (szCwd[strlen(szCwd) - 1] == '/' || szCwd[strlen(szCwd) - 1] == '\\' )
-		{
-			szCwd[strlen(szCwd) - 1] = 0;
-		}
+			if (szCwd[strlen(szCwd) - 1] == '/' || szCwd[strlen(szCwd) - 1] == '\\')
+			{
+				szCwd[strlen(szCwd) - 1] = 0;
+			}
 
-		char szAbsoluteModuleName[1024];
-		size_t cCwd = strlen( szCwd );
+			char szAbsoluteModuleName[1024];
+			size_t cCwd = strlen(szCwd);
 
 #if 0
-        // GoldSrc: Source keeps DLLs in bin subdir, GoldSrc doesn't.
-		if ( strstr( pModuleName, "bin/") == pModuleName || ( szCwd[ cCwd - 1 ] == 'n'  && szCwd[ cCwd - 2 ] == 'i' && szCwd[ cCwd - 3 ] == 'b' )  )
-		{
-			// don't make bin/bin path
-			Q_snprintf( szAbsoluteModuleName, sizeof(szAbsoluteModuleName), "%s/%s", szCwd, pModuleName );			
-		}
-		else
-		{
-			Q_snprintf( szAbsoluteModuleName, sizeof(szAbsoluteModuleName), "%s/bin/%s", szCwd, pModuleName );
-		}
+			// GoldSrc: Source keeps DLLs in bin subdir, GoldSrc doesn't.
+			if ( strstr( pModuleName, "bin/") == pModuleName || ( szCwd[ cCwd - 1 ] == 'n'  && szCwd[ cCwd - 2 ] == 'i' && szCwd[ cCwd - 3 ] == 'b' )  )
+			{
+				// don't make bin/bin path
+				Q_snprintf( szAbsoluteModuleName, sizeof(szAbsoluteModuleName), "%s/%s", szCwd, pModuleName );			
+			}
+			else
+			{
+				Q_snprintf( szAbsoluteModuleName, sizeof(szAbsoluteModuleName), "%s/bin/%s", szCwd, pModuleName );
+			}
 #endif
-        Q_snprintf( szAbsoluteModuleName, sizeof(szAbsoluteModuleName), "%s/%s", szCwd, pModuleName );
-		hDLL = Sys_LoadLibrary( szAbsoluteModuleName, flags );
+			Q_snprintf(szAbsoluteModuleName, sizeof(szAbsoluteModuleName), "%s/%s", szCwd, pModuleName);
+			hDLL = Sys_LoadLibrary(szAbsoluteModuleName, flags);
+		}
 	}
 
 	if ( !hDLL )
