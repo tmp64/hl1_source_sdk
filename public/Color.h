@@ -7,10 +7,14 @@
 
 #ifndef COLOR_H
 #define COLOR_H
+#include <cstring>
 
 #ifdef _WIN32
 #pragma once
 #endif
+
+// Color relies on int being 4 bytes long
+static_assert(sizeof(int) == 4, "int size is not 4");
 
 //-----------------------------------------------------------------------------
 // Purpose: Basic handler for an rgb set of colors
@@ -22,7 +26,7 @@ public:
 	// constructors
 	Color()
 	{
-		*((int *)this) = 0;
+		memset(_color, 0, 4);
 	}
 	Color(int _r,int _g,int _b)
 	{
@@ -56,12 +60,14 @@ public:
 
 	void SetRawColor( int color32 )
 	{
-		*((int *)this) = color32;
+		memcpy(_color, &color32, 4);
 	}
 
 	int GetRawColor() const
 	{
-		return *((int *)this);
+		int ret;
+		memcpy(&ret, _color, 4);
+		return ret;
 	}
 
 	inline int r() const	{ return _color[0]; }
@@ -81,17 +87,18 @@ public:
 
 	bool operator == (const Color &rhs) const
 	{
-		return ( *((int *)this) == *((int *)&rhs) );
+		return memcmp(_color, rhs._color, 4) == 0;
 	}
 
 	bool operator != (const Color &rhs) const
 	{
-		return !(operator==(rhs));
+		return memcmp(_color, rhs._color, 4) != 0;
 	}
 
 	Color &operator=( const Color &rhs )
 	{
-		SetRawColor( rhs.GetRawColor() );
+		if (this != &rhs)
+			memcpy(_color, rhs._color, 4);
 		return *this;
 	}
 
