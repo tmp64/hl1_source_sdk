@@ -20,10 +20,10 @@ extern int g_nYou_Must_Add_Public_Vgui_Controls_Vgui_ControlsCpp_To_Your_Project
 namespace vgui2
 {
 
-class CSchemeManagerWrapper : public ISchemeManager
+class CSchemeManagerWrapper : public ISchemeManagerEx
 {
 public:
-	ISchemeManager009 *m_pEngineIface = nullptr;
+	ISchemeManager *m_pEngineIface = nullptr;
 
 	virtual HScheme LoadSchemeFromFile(const char *fileName, const char *tag)
 	{
@@ -165,6 +165,11 @@ static CSchemeManagerWrapper s_SchemeManagerWrapper;
 
 static char g_szControlsModuleName[256];
 
+ISchemeManagerEx *scheme()
+{
+    return &s_SchemeManagerWrapper;
+}
+
 //-----------------------------------------------------------------------------
 // Purpose: Initializes the controls
 //-----------------------------------------------------------------------------
@@ -202,9 +207,7 @@ bool VGui_InitInterfacesList( const char *moduleName, CreateInterfaceFn *factory
 		return false;
 	}
 
-	// Override g_pVGuiSchemeManager
-	s_SchemeManagerWrapper.m_pEngineIface = (ISchemeManager009 *)g_pVGuiSchemeManager;
-	g_pVGuiSchemeManager = &s_SchemeManagerWrapper;
+	s_SchemeManagerWrapper.m_pEngineIface = g_pVGuiSchemeManager;
 
 	return true;
 }

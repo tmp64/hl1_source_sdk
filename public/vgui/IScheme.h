@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -49,7 +49,7 @@ public:
 	virtual Color GetColor(const char *colorName, Color defaultColor) = 0;
 };
 
-class ISchemeManager009 : public IBaseInterface
+class ISchemeManager : public IBaseInterface
 {
 public:
 	// loads a scheme from a file
@@ -95,7 +95,7 @@ public:
 // GoldSrc: These are not available in GoldSrc and are wrappers for corresponding function above
 // GoldSrc: They were added for compatibility for existing code.
 // GoldSrc: Except LoadSchemeFromFilePath with pathID, It's new. Use it instead of LoadSchemeFromFile
-class ISchemeManager: public ISchemeManager009
+class ISchemeManagerEx : public ISchemeManager
 {
 public:
 	// loads a scheme from a file
