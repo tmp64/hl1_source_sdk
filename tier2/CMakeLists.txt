@@ -5,7 +5,7 @@ set( TIER2_HEADER_FILES
 
 set( TIER2_SOURCE_FILES
 	KeyValuesCompat.cpp
-	steam_client_017.cpp
+	steam_api.cpp
 	tier2.cpp
 )
 
