@@ -94,7 +94,6 @@ public:
 
 // GoldSrc: These are not available in GoldSrc and are wrappers for corresponding function above
 // GoldSrc: They were added for compatibility for existing code.
-// GoldSrc: Except LoadSchemeFromFilePath with pathID, It's new. Use it instead of LoadSchemeFromFile
 class ISchemeManagerEx : public ISchemeManager
 {
 public:
@@ -107,7 +106,6 @@ public:
 	[[deprecated]] virtual int GetProportionalScaledValueEx(HScheme scheme, int normalizedValue) = 0;
 	[[deprecated]] virtual int GetProportionalNormalizedValueEx(HScheme scheme, int scaledValue) = 0;
 
-	// Use this one instead of LoadSchemeFromFile without pathID
 	// Path must be writable. See LoadSchemeFromFilePath in vgui/vgui_controls/controls.cpp.
 	virtual HScheme LoadSchemeFromFilePath(const char *fileName, const char *pathID, const char *tag) = 0;
 };
