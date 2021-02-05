@@ -36,6 +36,12 @@ if( UNIX )
 endif()
 
 # Steam API
+
+if( NOT WIN32 )
+	# SOURCE_SDK_MIN_STEAM_API is Windows-only
+	set( SOURCE_SDK_MIN_STEAM_API FALSE )
+endif()
+
 if( SOURCE_SDK_NO_STEAM )
 	set( STEAM_API_DEFINES
 		NO_STEAM
@@ -45,6 +51,14 @@ else()
 	set( STEAM_API_LIBRARIES
 		steam_api
 	)
+
+	# Links client with a steam_api.dll with less symbols.
+	# Allows client.dll run on HL with old engine (but SteamAPI won't work).
+	if( SOURCE_SDK_MIN_STEAM_API )
+		set( STEAM_API_DEFINES
+			SOURCE_SDK_MIN_STEAM_API
+		)
+	endif()
 endif()
 
 set( SOURCE_SDK_DEFINES

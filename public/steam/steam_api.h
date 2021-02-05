@@ -89,10 +89,15 @@ S_API void S_CALLTYPE SteamAPI_SetMiniDumpComment( const char *pchMsg );
 // interface pointers, configured by SteamAPI_Init()
 S_API ISteamClient *S_CALLTYPE SteamClient();
 
-// SteamClient() returns ISteamClient012 which doesn't have GetISteamHTMLSurface used by
-// vgui2::HTML. SteamClient017() is implemented in tier2
+// SteamClient() returns ISteamClient012 which doesn't have GetISteamHTMLSurface used by vgui2::HTML.
+// SteamClient017() is implemented in tier2/steam_api.cpp
 ISteamClient017 *SteamClient017();
-void InitSteamClient017();
+
+/**
+ * Returns whether SteamAPI interfaces are available and safe to call.
+ * Returns true unless SOURCE_SDK_MIN_STEAM_API is enabled and running on old engine.
+ */
+bool SteamAPI_IsAvailable();
 
 //
 // VERSION_SAFE_STEAM_API_INTERFACES is usually not necessary, but it provides safety against releasing
@@ -180,9 +185,17 @@ S_API void S_CALLTYPE SteamAPI_RunCallbacks();
 // Internal functions used by the utility CCallback objects to receive callbacks
 S_API void S_CALLTYPE SteamAPI_RegisterCallback( class CCallbackBase *pCallback, int iCallback );
 S_API void S_CALLTYPE SteamAPI_UnregisterCallback( class CCallbackBase *pCallback );
+
+#ifdef SOURCE_SDK_MIN_STEAM_API
+// Internal functions used by the utility CCallResult objects to receive async call results
+// Implemented in tier2/steam_api.cpp
+void S_CALLTYPE SteamAPI_RegisterCallResult( class CCallbackBase *pCallback, SteamAPICall_t hAPICall );
+void S_CALLTYPE SteamAPI_UnregisterCallResult( class CCallbackBase *pCallback, SteamAPICall_t hAPICall );
+#else
 // Internal functions used by the utility CCallResult objects to receive async call results
 S_API void S_CALLTYPE SteamAPI_RegisterCallResult( class CCallbackBase *pCallback, SteamAPICall_t hAPICall );
 S_API void S_CALLTYPE SteamAPI_UnregisterCallResult( class CCallbackBase *pCallback, SteamAPICall_t hAPICall );
+#endif
 
 
 //-----------------------------------------------------------------------------
@@ -420,13 +433,6 @@ S_API const char *SteamAPI_GetSteamInstallPath();
 // returns the pipe we are communicating to Steam with
 S_API HSteamPipe SteamAPI_GetHSteamPipe();
 
-// sets whether or not Steam_RunCallbacks() should do a try {} catch (...) {} around calls to issuing callbacks
-S_API void SteamAPI_SetTryCatchCallbacks( bool bTryCatchCallbacks );
-
-// backwards compat export, passes through to SteamAPI_ variants
-S_API HSteamPipe GetHSteamPipe();
-S_API HSteamUser GetHSteamUser();
-
 #ifdef VERSION_SAFE_STEAM_API_INTERFACES
 //----------------------------------------------------------------------------------------------------------------------------------------------------------//
 // VERSION_SAFE_STEAM_API_INTERFACES uses CSteamAPIContext to provide interfaces to each module in a way that 
@@ -526,10 +532,11 @@ inline void CSteamAPIContext::Clear()
 // This function must be inlined so the module using steam_api.dll gets the version names they want.
 inline bool CSteamAPIContext::Init()
 {
-	if ( !SteamClient() )
+	if ( SteamAPI_IsAvailable() )
 		return false;
 
-	InitSteamClient017();
+	if ( !SteamClient() )
+		return false;
 
 	HSteamUser hSteamUser = SteamAPI_GetHSteamUser();
 	HSteamPipe hSteamPipe = SteamAPI_GetHSteamPipe();

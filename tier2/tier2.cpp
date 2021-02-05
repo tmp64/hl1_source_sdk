@@ -31,6 +31,7 @@ vgui2::ISchemeManager *g_pVGuiSchemeManager;
 vgui2::ISystem *g_pVGuiSystem;
 
 static bool s_bConnected = false;
+void SteamAPI_InitForGoldSrc();
 
 void ConnectTier2Libraries(CreateInterfaceFn *pFactoryList, int nFactoryCount)
 {
@@ -44,6 +45,8 @@ void ConnectTier2Libraries(CreateInterfaceFn *pFactoryList, int nFactoryCount)
 		Error("tier2: Failed to initialize KeyValues\n");
 		Assert(false);
 	}
+
+	SteamAPI_InitForGoldSrc();
 
 	for (int i = 0; i < nFactoryCount; ++i)
 	{
