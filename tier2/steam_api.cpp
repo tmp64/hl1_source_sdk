@@ -109,6 +109,9 @@ ISteamClient017 *SteamClient017()
 
 bool SteamAPI_IsAvailable()
 {
+	if (!g_bIsInited)
+		SteamAPI_InitForGoldSrc();
+
 #ifdef SOURCE_SDK_MIN_STEAM_API
 	return g_bIsAvailable;
 #else
