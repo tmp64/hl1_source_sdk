@@ -1,6 +1,5 @@
 #define VERSION_SAFE_STEAM_API_INTERFACES
-
-#ifdef PLATFORM_WINDOWS
+#ifdef _WIN32
 #define NOMINMAX
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -8,6 +7,8 @@
 #include <dlfcn.h>
 #endif
 
+#include <fstream>
+#include <string>
 #include <tier0/dbg.h>
 #include <tier1/interface.h>
 #include <tier2/tier2.h>
@@ -54,20 +55,52 @@ void LoadSteamClient017()
 	if (g_pSteamClient017)
 		return;
 
+	CSysModule *steamClientModule = nullptr;
+#ifdef _WIN32
 	// steamclient.dll should be loaded by steam_api
-#ifdef PLATFORM_WINDOWS
-	CSysModule *steamClientModule = Sys_LoadModule("steamclient" DLL_EXT_STRING);
-#else
-	CSysModule *steamClientModule = reinterpret_cast<CSysModule *>(dlopen("steamclient" DLL_EXT_STRING, RTLD_NOW));
-#endif
-
+	steamClientModule = Sys_LoadModule("steamclient" DLL_EXT_STRING);
 	if (!steamClientModule)
 	{
-#ifndef PLATFORM_WINDOWS
-		Warning("Failed to load steamclient" DLL_EXT_STRING ": %s\n", dlerror());
-#endif
+		Warning("Failed to load steamclient.dll\n");
 		return;
 	}
+#else
+	// steamclient.so should be loaded by steam_api
+	std::string libpath;
+	try
+	{
+		// Check /proc/self/maps to find full path to steamclient.so.
+		std::ifstream file;
+		file.exceptions(std::ios::failbit | std::ios::badbit);
+		file.open("/proc/self/maps");
+
+		std::string line;
+		std::string libname = "steamclient.so";
+		while (std::getline(file, line))
+		{
+			if (line.size() >= libname.size() &&
+			    std::string_view(line).substr(line.size() - libname.size()) == libname)
+			{
+				size_t idx = line.find_last_of(' ');
+				libpath = line.substr(idx + 1);
+				break;
+			}
+		}
+	}
+	catch (const std::exception &e)
+	{
+		Warning("Failed to read /proc/self/maps: %s\n", e.what());
+		return;
+	}
+
+	if (libpath.empty())
+	{
+		Warning("Failed to get full path to steamclient.so\n");
+		return;
+	}
+
+	steamClientModule = Sys_LoadModule(libpath.c_str());
+#endif
 
 	CreateInterfaceFn factory = Sys_GetFactory(steamClientModule);
 	if (!factory)
