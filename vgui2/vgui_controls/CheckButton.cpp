@@ -22,6 +22,7 @@ using namespace vgui2;
 
 void CheckImage::Paint()
 {
+#ifdef _WIN32
 	DrawSetTextFont(GetFont());
 
 	// draw background
@@ -55,6 +56,59 @@ void CheckImage::Paint()
 
 		DrawPrintChar(0, 2, 'b');
 	}
+#else
+	// GoldSrc: On Linux "Marlett" symbol font isn't rendered at all.
+	// GoldSrc: Draw the checkbox using primitives
+	auto fnGetPoportional = [&](int x) {
+		if (_CheckButton->IsProportional())
+			return scheme()->GetProportionalScaledValue(x);
+		else
+			return x;
+	};
+
+	int X_OFF = fnGetPoportional(0);
+	int Y_OFF = fnGetPoportional(2);
+	int BORDER_SIZE = fnGetPoportional(12);
+	int BORDER_THICK = fnGetPoportional(1);
+	int CHECK_SIZE = fnGetPoportional(6);
+
+	// draw background
+	if (_CheckButton->IsEnabled() && _CheckButton->IsCheckButtonCheckable() )
+	{
+		DrawSetColor(_bgColor);
+	}
+	else
+	{
+		DrawSetColor(_CheckButton->GetDisabledBgColor());
+	}
+
+	DrawFilledRect(X_OFF + BORDER_THICK, Y_OFF + BORDER_THICK, X_OFF + BORDER_SIZE - BORDER_THICK, Y_OFF + BORDER_SIZE - BORDER_THICK);
+
+	// draw border box
+	DrawSetColor(_borderColor1);
+	DrawFilledRect(X_OFF, Y_OFF, X_OFF + BORDER_SIZE - BORDER_THICK, Y_OFF + BORDER_THICK);	// Top line
+	DrawFilledRect(X_OFF, Y_OFF + BORDER_THICK, X_OFF + BORDER_THICK, Y_OFF + BORDER_SIZE);	// Left line
+
+	DrawSetColor(_borderColor2);
+	DrawFilledRect(X_OFF + BORDER_SIZE - BORDER_THICK, Y_OFF, X_OFF + BORDER_SIZE, Y_OFF + BORDER_SIZE - BORDER_THICK);	// Right line
+	DrawFilledRect(X_OFF + BORDER_THICK, Y_OFF + BORDER_SIZE - BORDER_THICK, X_OFF + BORDER_SIZE, Y_OFF + BORDER_SIZE);	// Bottom line
+
+	// draw selected check
+	if (_CheckButton->IsSelected())
+	{
+		if ( !_CheckButton->IsEnabled() )
+		{
+			DrawSetColor( _CheckButton->GetDisabledFgColor() );
+		}
+		else
+		{
+			DrawSetColor(_checkColor);
+		}
+
+		int off = (BORDER_SIZE - CHECK_SIZE) / 2;
+		DrawFilledRect(X_OFF + off, Y_OFF + off, X_OFF + BORDER_SIZE - off, Y_OFF + BORDER_SIZE - off);
+	}
+#endif
 }
 
 DECLARE_BUILD_FACTORY_DEFAULT_TEXT( CheckButton, CheckButton );
