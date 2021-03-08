@@ -2889,8 +2889,9 @@ void Panel::InternalMouseFocusTicked()
 void Panel::InternalSetCursor()
 {
 	bool visible = IsVisible();
+	bool hasMouseInput = IsMouseInputEnabled();
 
-	if (visible)
+	if (visible && hasMouseInput)
 	{
 #if defined( VGUI_USEDRAGDROP )
 		// Drag drop is overriding cursor?
@@ -2905,9 +2906,20 @@ void Panel::InternalSetCursor()
 			visible &= ipanel()->IsVisible(p);
 			p = ipanel()->GetParent(p);
 		}
+
+		// Chain up to a popup
+		// Mouse visibility in the engine is calculated based on whether the popup has mouse input enabled
+		p = GetVParent();
+		while (p && !ipanel()->IsPopup(p))
+		{
+			p = ipanel()->GetParent(p);
+		}
+
+		if (p)
+			hasMouseInput = ipanel()->IsMouseInputEnabled(p);
 	
-		// only change the cursor if this panel is visible, and if its part of the main VGUI tree
-		if (visible && HasParent(surface()->GetEmbeddedPanel())) 
+		// only change the cursor if this panel is visible, has mouse input and if its part of the main VGUI tree
+		if (visible && hasMouseInput && HasParent(surface()->GetEmbeddedPanel()))
 		{	
 			HCursor cursor = GetCursor();
 			
