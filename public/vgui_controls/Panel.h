@@ -927,10 +927,10 @@ private:
 	// 1 == Textured (TextureId1 only)
 	// 2 == Rounded Corner Box
 	CPanelAnimationVar( int, m_nPaintBackgroundType, "PaintBackgroundType", "0" );
-	CPanelAnimationVarAliasType( int, m_nBgTextureId1, "Texture1", "gfx/vgui2/800corner1", "textureid" );
-	CPanelAnimationVarAliasType( int, m_nBgTextureId2, "Texture2", "gfx/vgui2/800corner2", "textureid" );
-	CPanelAnimationVarAliasType( int, m_nBgTextureId3, "Texture3", "gfx/vgui2/800corner3", "textureid" );
-	CPanelAnimationVarAliasType( int, m_nBgTextureId4, "Texture4", "gfx/vgui2/800corner4", "textureid" );
+	CPanelAnimationVarAliasType( int, m_nBgTextureId1, "Texture1", SOURCE_SDK_GFX_PATH "/800corner1", "textureid" );
+	CPanelAnimationVarAliasType( int, m_nBgTextureId2, "Texture2", SOURCE_SDK_GFX_PATH "/800corner2", "textureid" );
+	CPanelAnimationVarAliasType( int, m_nBgTextureId3, "Texture3", SOURCE_SDK_GFX_PATH "/800corner3", "textureid" );
+	CPanelAnimationVarAliasType( int, m_nBgTextureId4, "Texture4", SOURCE_SDK_GFX_PATH "/800corner4", "textureid" );
 
 	//=============================================================================
 	// HPE_BEGIN:

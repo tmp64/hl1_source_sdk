@@ -35,8 +35,12 @@ if( UNIX )
 	endif()
 endif()
 
-# Steam API
+# gfx path (path to 800corner*.tga in game directory)
+if( NOT SOURCE_SDK_GFX_PATH )
+	set( SOURCE_SDK_GFX_PATH "gfx/vgui2" )
+endif()
 
+# Steam API
 if( NOT WIN32 )
 	# SOURCE_SDK_MIN_STEAM_API is Windows-only
 	set( SOURCE_SDK_MIN_STEAM_API FALSE )
@@ -67,6 +71,7 @@ set( SOURCE_SDK_DEFINES
 	${STEAM_API_DEFINES}
 	NO_MALLOC_OVERRIDE
 	_DLL_EXT=${DLL_EXT_MACRO}
+	SOURCE_SDK_GFX_PATH="${SOURCE_SDK_GFX_PATH}"
 )
 
 if( SOURCE_SDK_VGUI_NS_ALIAS )
