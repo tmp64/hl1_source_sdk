@@ -14,6 +14,8 @@ set( CMAKE_MODULE_PATH
 # DLL extension macro
 if( WIN32 )
 	set( DLL_EXT_MACRO ".dll" )
+elseif( APPLE )
+	set( DLL_EXT_MACRO ".dylib" )
 else()
 	set( DLL_EXT_MACRO ".so" )
 endif()
