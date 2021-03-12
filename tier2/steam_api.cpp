@@ -64,7 +64,7 @@ void LoadSteamClient017()
 		Warning("Failed to load steamclient.dll\n");
 		return;
 	}
-#else
+#elseif LINUX
 	// steamclient.so should be loaded by steam_api
 	std::string libpath;
 	try
@@ -100,6 +100,9 @@ void LoadSteamClient017()
 	}
 
 	steamClientModule = Sys_LoadModule(libpath.c_str());
+#elseif OSX
+	// TODO: This is probably why it cant find the surface we want.
+	steamClientModule = Sys_LoadModule("");
 #endif
 
 	CreateInterfaceFn factory = Sys_GetFactory(steamClientModule);

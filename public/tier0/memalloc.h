@@ -331,15 +331,49 @@ inline void MemAlloc_GlobalMemoryStatus( size_t *pusedMemory, size_t *pfreeMemor
 #endif //!STEAM && NO_MALLOC_OVERRIDE
 
 #ifdef POSIX
+#ifdef OSX
+#include <stdlib.h>
+#else
 #include <malloc.h>
-inline void *_aligned_malloc( size_t nSize, size_t align )															{ return memalign( align, nSize ); }
+#endif
+inline void *_aligned_malloc( size_t nSize, size_t align )															{
+#ifdef OSX
+	void *data = nullptr;
+	
+	posix_memalign( (void **)&data, align, nSize );
+	
+	return data;
+#else
+	return memalign( align, nSize );
+#endif
+}
 inline void _aligned_free( void *ptr )																				{ free( ptr ); }
 
 inline void *MemAlloc_Alloc( size_t nSize, const char *pFileName = NULL, int nLine = 0 )							{ return malloc( nSize ); }
 inline void MemAlloc_Free( void *ptr, const char *pFileName = NULL, int nLine = 0 )									{ free( ptr ); }
 
-inline void *MemAlloc_AllocAligned( size_t size, size_t align, const char *pszFile = NULL, int nLine = 0  )	        { return memalign( align, size ); }
-inline void *MemAlloc_AllocAlignedFileLine( size_t size, size_t align, const char *pszFile = NULL, int nLine = 0 )	{ return memalign( align, size ); }
+inline void *MemAlloc_AllocAligned( size_t size, size_t align, const char *pszFile = NULL, int nLine = 0  )	        {
+#ifdef OSX
+	void *data = nullptr;
+	
+	posix_memalign( (void **)&data, align, size );
+	
+	return data;
+#else
+	return memalign( align, size );
+#endif
+}
+inline void *MemAlloc_AllocAlignedFileLine( size_t size, size_t align, const char *pszFile = NULL, int nLine = 0 )	{
+#ifdef OSX
+	void *data = nullptr;
+	
+	posix_memalign( (void **)&data, align, size );
+	
+	return data;
+#else
+	return memalign( align, size );
+#endif
+}
 inline void MemAlloc_FreeAligned( void *pMemBlock, const char *pszFile = NULL, int nLine = 0 ) 						{ free( pMemBlock ); }
 #endif
 

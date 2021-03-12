@@ -23,8 +23,6 @@ endif()
 # Platform definitions
 if( UNIX )
 	set( PLATFORM_DEFINES
-		LINUX
-		_LINUX
 		GNUC
 		POSIX
 	)
@@ -33,6 +31,12 @@ if( UNIX )
 		set( PLATFORM_DEFINES
 			${PLATFORM_DEFINES}
 			OSX
+		)
+	else()
+		set( PLATFORM_DEFINES
+			${PLATFORM_DEFINES}
+			LINUX
+			_LINUX
 		)
 	endif()
 endif()

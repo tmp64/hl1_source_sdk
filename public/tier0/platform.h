@@ -29,6 +29,7 @@
 #ifndef OSX
 #include <malloc.h>
 #else
+#include <stdlib.h>
 #include <malloc/malloc.h>
 #endif
 #include <new>
