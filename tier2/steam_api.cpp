@@ -14,6 +14,12 @@
 #include <tier2/tier2.h>
 #include <steam/steam_api.h>
 
+#ifdef OSX
+#include <libproc.h>
+#include <mach/mach.h>
+#include <mach/mach_vm.h>
+#endif
+
 namespace
 {
 bool g_bIsInited = false;
@@ -56,7 +62,7 @@ void LoadSteamClient017()
 		return;
 
 	CSysModule *steamClientModule = nullptr;
-#ifdef _WIN32
+#if defined(_WIN32)
 	// steamclient.dll should be loaded by steam_api
 	steamClientModule = Sys_LoadModule("steamclient" DLL_EXT_STRING);
 	if (!steamClientModule)
@@ -64,7 +70,7 @@ void LoadSteamClient017()
 		Warning("Failed to load steamclient.dll\n");
 		return;
 	}
-#elseif LINUX
+#elif defined(LINUX)
 	// steamclient.so should be loaded by steam_api
 	std::string libpath;
 	try
@@ -100,9 +106,45 @@ void LoadSteamClient017()
 	}
 
 	steamClientModule = Sys_LoadModule(libpath.c_str());
-#elseif OSX
-	// TODO: This is probably why it cant find the surface we want.
-	steamClientModule = Sys_LoadModule("");
+#elif defined(OSX)
+	std::string target_process("steam_osx");
+	
+	// To get a list of mapped libraries in any given executable we need to first access its task port with task_for_pid-allow, this requires a special entitlement and code signing which is overkill for this narrow purpose
+	// The quick and easy solution to get around that and find this library dynamically regardless of installation path is to find an instance of steam_osx, strip the name, and substitute steamclient.dylib in its place
+	// This method will always work because steam_osx is required for any game to function and they're both contained within the same application bundle
+	// Sys_LoadModule will always be passed the correct path to steamclient.dylib or somehow even in the event of a fail condition, the path to an unknown process is given, failing silently
+	int count = proc_listpids(PROC_ALL_PIDS, 0, nullptr, 0) / sizeof(pid_t);
+	size_t size = count * sizeof(pid_t);
+	pid_t *pids = new pid_t[size];
+	
+	proc_listpids(PROC_ALL_PIDS, 0, pids, size);
+	
+	char buffer[PROC_PIDPATHINFO_MAXSIZE] = {};
+	
+	for (int i = 1; i < count; i++) {
+		if (!pids[i]) {
+			continue;
+		}
+		
+		if (proc_pidpath(pids[i], buffer, sizeof(buffer)) < 0) {
+			continue;
+		}
+		
+		if (strstr(buffer, target_process.c_str()) != nullptr) {
+			break;
+		}
+	}
+	
+	delete[] pids;
+	
+	std::string path = buffer;
+	size_t found = path.find(target_process);
+	
+	if (found != std::string::npos) {
+		path.replace(found, target_process.length(), "steamclient.dylib");
+	}
+	
+	steamClientModule = Sys_LoadModule(path.c_str());
 #endif
 
 	CreateInterfaceFn factory = Sys_GetFactory(steamClientModule);
