@@ -109,10 +109,15 @@ void LoadSteamClient017()
 #elif defined(OSX)
 	std::string target_process("steam_osx");
 	
-	// To get a list of mapped libraries in any given executable we need to first access its task port with task_for_pid-allow, this requires a special entitlement and code signing which is overkill for this narrow purpose
-	// The quick and easy solution to get around that and find this library dynamically regardless of installation path is to find an instance of steam_osx, strip the name, and substitute steamclient.dylib in its place
-	// This method will always work because steam_osx is required for any game to function and they're both contained within the same application bundle
-	// Sys_LoadModule will always be passed the correct path to steamclient.dylib or somehow even in the event of a fail condition, the path to an unknown process is given, failing silently
+	// To get a list of mapped libraries in any given executable we need to first access its
+	// task port with task_for_pid-allow, this requires a special entitlement and code signing
+	// which is overkill for this narrow purpose. The quick and easy solution to get around
+	// that and find this library dynamically regardless of installation path is to find an
+	// instance of steam_osx, strip the name, and substitute steamclient.dylib in its place.
+	// This method will always work because steam_osx is required for any game to function and
+	// they're both contained within the same application bundle. Sys_LoadModule will always be
+	// passed the correct path to steamclient.dylib or somehow even in the event of a fail condition,
+	// the path to an unknown process is given, failing silently.
 	int count = proc_listpids(PROC_ALL_PIDS, 0, nullptr, 0) / sizeof(pid_t);
 	size_t size = count * sizeof(pid_t);
 	pid_t *pids = new pid_t[size];
