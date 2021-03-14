@@ -15,9 +15,8 @@
 #include <steam/steam_api.h>
 
 #ifdef OSX
+#include <vector>
 #include <libproc.h>
-#include <mach/mach.h>
-#include <mach/mach_vm.h>
 #endif
 
 namespace
@@ -118,20 +117,21 @@ void LoadSteamClient017()
 	// they're both contained within the same application bundle. Sys_LoadModule will always be
 	// passed the correct path to steamclient.dylib or somehow even in the event of a fail condition,
 	// the path to an unknown process is given, failing silently.
-	int count = proc_listpids(PROC_ALL_PIDS, 0, nullptr, 0) / sizeof(pid_t);
-	size_t size = count * sizeof(pid_t);
-	pid_t *pids = new pid_t[size];
+	int size = proc_listpids(PROC_ALL_PIDS, 0, nullptr, 0);
+	size_t count = size / sizeof(pid_t);
 	
-	proc_listpids(PROC_ALL_PIDS, 0, pids, size);
+	std::vector<pid_t> pids(count);
+	
+	proc_listpids(PROC_ALL_PIDS, 0, pids.data(), size);
 	
 	char buffer[PROC_PIDPATHINFO_MAXSIZE] = {};
 	
-	for (int i = 1; i < count; i++) {
-		if (!pids[i]) {
+	for (auto &pid : pids) {
+		if (!pid) {
 			continue;
 		}
 		
-		if (proc_pidpath(pids[i], buffer, sizeof(buffer)) < 0) {
+		if (proc_pidpath(pid, buffer, sizeof(buffer)) < 0) {
 			continue;
 		}
 		
@@ -139,8 +139,6 @@ void LoadSteamClient017()
 			break;
 		}
 	}
-	
-	delete[] pids;
 	
 	std::string path = buffer;
 	size_t found = path.find(target_process);
