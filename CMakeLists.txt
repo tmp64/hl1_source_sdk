@@ -14,6 +14,8 @@ set( CMAKE_MODULE_PATH
 # DLL extension macro
 if( WIN32 )
 	set( DLL_EXT_MACRO ".dll" )
+elseif( APPLE )
+	set( DLL_EXT_MACRO ".dylib" )
 else()
 	set( DLL_EXT_MACRO ".so" )
 endif()
@@ -21,8 +23,6 @@ endif()
 # Platform definitions
 if( UNIX )
 	set( PLATFORM_DEFINES
-		LINUX
-		_LINUX
 		GNUC
 		POSIX
 	)
@@ -31,6 +31,12 @@ if( UNIX )
 		set( PLATFORM_DEFINES
 			${PLATFORM_DEFINES}
 			OSX
+		)
+	else()
+		set( PLATFORM_DEFINES
+			${PLATFORM_DEFINES}
+			LINUX
+			_LINUX
 		)
 	endif()
 endif()
