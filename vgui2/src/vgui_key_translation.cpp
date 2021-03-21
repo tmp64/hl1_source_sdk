@@ -5,6 +5,7 @@
 //===========================================================================//
 
 #if defined( WIN32 ) && !defined( _X360 )
+#undef ARRAYSIZE
 #include <wtypes.h>
 #include <winuser.h>
 #include "xbox/xboxstubs.h"

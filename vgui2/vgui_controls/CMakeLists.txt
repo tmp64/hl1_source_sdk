@@ -188,3 +188,35 @@ target_compile_definitions( vgui_controls PRIVATE
 set_target_properties( vgui_controls PROPERTIES
 	COMPILE_FLAGS "${SOURCE_SDK_WARNING_LEVEL}" 
 )
+
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL  "3.16.0")
+    target_precompile_headers( vgui_controls PRIVATE
+		<cstdlib>
+		<cstring>
+		<algorithm>
+		<string>
+		<vector>
+		<map>
+		<unordered_map>
+
+		<tier0/platform.h>
+		<tier0/dbg.h>
+		<tier1/strtools.h>
+		<tier1/KeyValues.h>
+
+		<vgui/VGUI2.h>
+		<vgui/IVGui.h>
+		<vgui/IBorder.h>
+		<vgui/IInputInternal.h>
+		<vgui/ILocalize.h>
+		<vgui/IPanel.h>
+		<vgui/IScheme.h>
+		<vgui/ISurface.h>
+		<vgui/ISystem.h>
+		<vgui_controls/Controls.h>
+		<vgui_controls/Panel.h>
+		<vgui_controls/Label.h>
+		<vgui_controls/Button.h>
+		<vgui_controls/Slider.h>
+	)
+endif()
