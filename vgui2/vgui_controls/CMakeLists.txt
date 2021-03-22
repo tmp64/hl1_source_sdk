@@ -177,6 +177,8 @@ add_library( vgui_controls STATIC
 	${VGUI_CONTROLS_SOURCE_FILES}
 )
 
+source_sdk_check_winxp_support( vgui_controls )
+
 target_include_directories( vgui_controls PRIVATE
 	${SOURCE_SDK_INCLUDE_PATHS}
 )

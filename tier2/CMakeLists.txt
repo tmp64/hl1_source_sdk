@@ -14,6 +14,8 @@ add_library( tier2 STATIC
 	${TIER2_SOURCE_FILES}
 )
 
+source_sdk_check_winxp_support( tier2 )
+
 target_include_directories( tier2 PRIVATE
 	${SOURCE_SDK_INCLUDE_PATHS}
 )

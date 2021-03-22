@@ -41,6 +41,33 @@ if( UNIX )
 	endif()
 endif()
 
+# Windows XP support - disables thread-safe init
+macro( source_sdk_check_winxp_support target_name )
+	# Visual Studio only.
+	if( MSVC )
+		#Verify that we have the data we need.
+		if( NOT TARGET ${target_name} )
+			message( FATAL_ERROR "Target ${target_name} does not exist" )
+		endif()
+
+		# VS2015 and newer requires this
+		if( NOT "${MSVC_VERSION}" LESS 1900 AND CMAKE_VS_PLATFORM_TOOLSET MATCHES ".*_xp$" )
+			get_target_property( FLAGS ${target_name} COMPILE_FLAGS )
+			
+			# Check if it's already set. Eliminates some noise in the output if it was explicitly disabled before
+			if( ${FLAGS} STREQUAL "NOTFOUND" )
+				message( WARNING "Couldn't get compile flags from target ${target_name}" )
+			else()
+				if( NOT FLAGS MATCHES "/Zc:threadSafeInit-" )
+					target_compile_options( ${target_name} PRIVATE
+						/Zc:threadSafeInit-
+					)
+				endif()
+			endif()
+		endif()
+	endif()
+endmacro()
+
 # gfx path (path to 800corner*.tga in game directory)
 if( NOT SOURCE_SDK_GFX_PATH )
 	set( SOURCE_SDK_GFX_PATH "gfx/vgui2" )
