@@ -23,6 +23,7 @@
 #include <stdlib.h>
 
 #include "tier0/dbg.h"
+#include "mathlib/dbg.h"
 #include "mathlib/vector.h"
 
 #include "mathlib/mathlib.h"
@@ -66,7 +67,7 @@ inline Vector32& Vector32::operator=(const Vector &vOther)
 		if (fmax < expScale[exp])
 			break;
 	}
-	Assert( fmax < expScale[exp] );
+	MathlibAssert(( fmax < expScale[exp] );
 
 	float fexp = 512.0f / expScale[exp];
 

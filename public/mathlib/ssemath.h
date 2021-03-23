@@ -12,6 +12,7 @@
 #include <xmmintrin.h>
 #endif
 
+#include <mathlib/dbg.h>
 #include <mathlib/vector.h>
 #include <mathlib/mathlib.h>
 
@@ -122,7 +123,7 @@ FORCEINLINE void TestVPUFlags()
 	}
 	unsigned int * flags		= (unsigned int *)&a;
 	unsigned int   controlWord	= flags[3];
-	Assert(controlWord == 0);
+	MathlibAssert(controlWord == 0);
 }
 #else  // _DEBUG
 FORCEINLINE void TestVPUFlags() {}
@@ -929,7 +930,7 @@ FORCEINLINE void StoreUnalignedIntSIMD( int32 *pSIMD, const fltx4 & a )
 // fixed point conversion is done.
 FORCEINLINE fltx4 UnsignedIntConvertToFltSIMD( const u32x4 &vSrcA )
 {
-	Assert(0);			/* pc has no such operation */
+	MathlibAssert(0);			/* pc has no such operation */
 	fltx4 retval;
 	SubFloat( retval, 0 ) = ( (float) SubInt( retval, 0 ) );
 	SubFloat( retval, 1 ) = ( (float) SubInt( retval, 1 ) );
@@ -1225,14 +1226,14 @@ FORCEINLINE fltx4 ReplicateX4( float flValue )					//  a,a,a,a
 {
 	// NOTE: if flValue comes from a register, this causes a Load-Hit-Store stall (don't mix fpu/vpu math!)
 	float * pValue = &flValue;
-	Assert( pValue );
-    Assert( ((unsigned int)pValue & 3) == 0);
+	MathlibAssert( pValue );
+    MathlibAssert( ((unsigned int)pValue & 3) == 0);
 	return __vspltw( __lvlx( pValue, 0 ), 0 );
 }
 
 FORCEINLINE fltx4 ReplicateX4( const float *pValue )					//  a,a,a,a
 {
-	Assert( pValue );
+	MathlibAssert( pValue );
 	return __vspltw( __lvlx( pValue, 0 ), 0 );
 }
 
@@ -1241,8 +1242,8 @@ FORCEINLINE fltx4 ReplicateIX4( int nValue )
 {
 	// NOTE: if nValue comes from a register, this causes a Load-Hit-Store stall (should not mix ints with fltx4s!)
 	int * pValue = &nValue;
-	Assert( pValue );
-    Assert( ((unsigned int)pValue & 3) == 0);
+	MathlibAssert( pValue );
+    MathlibAssert( ((unsigned int)pValue & 3) == 0);
 	return __vspltw( __lvlx( pValue, 0 ), 0 );
 }
 

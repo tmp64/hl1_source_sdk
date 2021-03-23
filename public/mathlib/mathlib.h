@@ -10,6 +10,7 @@
 #include <math.h>
 #include "tier0/basetypes.h"
 #include "tier0/commonmacros.h"
+#include "mathlib/dbg.h"
 #include "mathlib/vector.h"
 #include "mathlib/vector2d.h"
 #include "tier0/dbg.h"
@@ -261,8 +262,8 @@ struct matrix3x4_t
 		}
 	}
 
-	float *operator[]( int i )				{ Assert(( i >= 0 ) && ( i < 3 )); return m_flMatVal[i]; }
-	const float *operator[]( int i ) const	{ Assert(( i >= 0 ) && ( i < 3 )); return m_flMatVal[i]; }
+	float *operator[]( int i )				{ MathlibAssert(( i >= 0 ) && ( i < 3 )); return m_flMatVal[i]; }
+	const float *operator[]( int i ) const	{ MathlibAssert(( i >= 0 ) && ( i < 3 )); return m_flMatVal[i]; }
 	float *Base()							{ return &m_flMatVal[0][0]; }
 	const float *Base() const				{ return &m_flMatVal[0][0]; }
 
@@ -616,13 +617,13 @@ void MatrixQuaternion( const matrix3x4_t &mat, Quaternion &q );
 // A couple methods to find the dot product of a vector with a matrix row or column...
 inline float MatrixRowDotProduct( const matrix3x4_t &in1, int row, const Vector& in2 )
 {
-	Assert( (row >= 0) && (row < 3) );
+	MathlibAssert( (row >= 0) && (row < 3) );
 	return DotProduct( in1[row], in2.Base() ); 
 }
 
 inline float MatrixColumnDotProduct( const matrix3x4_t &in1, int col, const Vector& in2 )
 {
-	Assert( (col >= 0) && (col < 4) );
+	MathlibAssert( (col >= 0) && (col < 4) );
 	return in1[0][col] * in2[0] + in1[1][col] * in2[1] + in1[2][col] * in2[2]; 
 }
 
@@ -1001,7 +1002,7 @@ void BuildGammaTable( float gamma, float texGamma, float brightness, int overbri
 inline float TexLightToLinear( int c, int exponent )
 {
 	extern float power2_n[256]; 
-	Assert( exponent >= -128 && exponent <= 127 );
+	MathlibAssert( exponent >= -128 && exponent <= 127 );
 	return ( float )c * power2_n[exponent+128];
 }
 
@@ -1204,7 +1205,7 @@ FORCEINLINE int RoundFloatToInt(float f)
 	return _mm_cvtss_si32(_mm_load_ss(&f));
 #elif defined( _X360 )
 #ifdef Assert
-	Assert( IsFPUControlWordSet() );
+	MathlibAssert( IsFPUControlWordSet() );
 #endif
 	union
 	{
@@ -1222,7 +1223,7 @@ FORCEINLINE unsigned char RoundFloatToByte(float f)
 {
 	int nResult = RoundFloatToInt(f);
 #ifdef Assert
-	Assert( (nResult & ~0xFF) == 0 );
+	MathlibAssert( (nResult & ~0xFF) == 0 );
 #endif
 	return (unsigned char) nResult;
 }
@@ -1231,7 +1232,7 @@ FORCEINLINE unsigned long RoundFloatToUnsignedLong(float f)
 {
 #if defined( _X360 )
 #ifdef Assert
-	Assert( IsFPUControlWordSet() );
+	MathlibAssert( IsFPUControlWordSet() );
 #endif
 	union
 	{
@@ -1240,7 +1241,7 @@ FORCEINLINE unsigned long RoundFloatToUnsignedLong(float f)
 		unsigned long pResult[2];
 	};
 	flResult = __fctiw( f );
-	Assert( pIntResult[1] >= 0 );
+	MathlibAssert( pIntResult[1] >= 0 );
 	return pResult[1];
 #else  // !X360
 	
@@ -1907,9 +1908,9 @@ FORCEINLINE unsigned int * PackNormal_HEND3N( const float *pNormal, unsigned int
 
 	// the normal is out of bounds, determine the source and fix
 	// clamping would be even more of a slowdown here
-	Assert( temp[0] >= -1023 && temp[0] <= 1023 );
-	Assert( temp[1] >= -1023 && temp[1] <= 1023 );
-	Assert( temp[2] >= -511 && temp[2] <= 511 );
+	MathlibAssert( temp[0] >= -1023 && temp[0] <= 1023 );
+	MathlibAssert( temp[1] >= -1023 && temp[1] <= 1023 );
+	MathlibAssert( temp[2] >= -511 && temp[2] <= 511 );
 	
 	*pPackedNormal = ( ( temp[2] & 0x3ff ) << 22L ) |
                      ( ( temp[1] & 0x7ff ) << 11L ) |
@@ -1927,9 +1928,9 @@ FORCEINLINE unsigned int * PackNormal_HEND3N( float nx, float ny, float nz, unsi
 
 	// the normal is out of bounds, determine the source and fix
 	// clamping would be even more of a slowdown here
-	Assert( temp[0] >= -1023 && temp[0] <= 1023 );
-	Assert( temp[1] >= -1023 && temp[1] <= 1023 );
-	Assert( temp[2] >= -511 && temp[2] <= 511 );
+	MathlibAssert( temp[0] >= -1023 && temp[0] <= 1023 );
+	MathlibAssert( temp[1] >= -1023 && temp[1] <= 1023 );
+	MathlibAssert( temp[2] >= -511 && temp[2] <= 511 );
 	
 	*pPackedNormal = ( ( temp[2] & 0x3ff ) << 22L ) |
                      ( ( temp[1] & 0x7ff ) << 11L ) |
@@ -2080,7 +2081,7 @@ FORCEINLINE unsigned int * PackNormal_UBYTE4( float nx, float ny, float nz, unsi
 	float ySign = ny < 0.0f ? -1.0f : 1.0f;
 	float zSign = nz < 0.0f ? -1.0f : 1.0f;
 	float tSign = binormalSign;
-	Assert( ( binormalSign == +1.0f ) || ( binormalSign == -1.0f ) );
+	MathlibAssert( ( binormalSign == +1.0f ) || ( binormalSign == -1.0f ) );
 
 	float xSignBit = 0.5f*( 1 - xSign );			// [-1,+1] -> [1,0]
 	float ySignBit = 0.5f*( 1 - ySign );			// 1 is negative bit (like slt instruction)

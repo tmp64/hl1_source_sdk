@@ -19,6 +19,7 @@
 #include "tier0/platform.h"
 #include "tier0/dbg.h"
 #include "tier1/utlsoacontainer.h"
+#include "mathlib/dbg.h"
 #include "mathlib/ssemath.h"
 
 class CSIMDVectorMatrix
@@ -105,9 +106,9 @@ public:
 	// you're not getting the sse advantage
 	Vector Element(int x, int y) const
 	{
-		Assert( m_pData );
-		Assert( x < m_nWidth );
-		Assert( y < m_nHeight );
+		MathlibAssert( m_pData );
+		MathlibAssert( x < m_nWidth );
+		MathlibAssert( y < m_nHeight );
 		Vector ret;
 		FourVectors const *pData=m_pData+y*m_nPaddedWidth+(x >> 2);
 
@@ -121,16 +122,16 @@ public:
 	//addressing the individual fourvectors elements
 	FourVectors &CompoundElement(int x, int y)
 	{
-		Assert( m_pData );
-		Assert( y < m_nHeight );
-		Assert( x < m_nPaddedWidth );
+		MathlibAssert( m_pData );
+		MathlibAssert( y < m_nHeight );
+		MathlibAssert( x < m_nPaddedWidth );
 		return m_pData[x + m_nPaddedWidth*y ];
 	}
 
 	// math operations on the whole image
 	void Clear( void )
 	{
-		Assert( m_pData );
+		MathlibAssert( m_pData );
 		memset( m_pData, 0, m_nHeight*m_nPaddedWidth*sizeof(m_pData[0]) );
 	}
 

@@ -11,6 +11,7 @@
 #endif
 
 
+#include "mathlib/dbg.h"
 #include "mathlib/ssemath.h"
 
 // Use this #define to allow SSE versions of Quaternion math
@@ -245,7 +246,7 @@ FORCEINLINE fltx4 QuaternionScaleSIMD( const fltx4 &p, float t )
 	// rescale rotation
 	r = 1.0f - sinsom * sinsom;
 
-	// Assert( r >= 0 );
+	// MathlibAssert( r >= 0 );
 	if (r < 0.0f) 
 		r = 0.0f;
 	r = sqrt( r );

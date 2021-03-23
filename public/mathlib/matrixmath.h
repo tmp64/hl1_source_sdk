@@ -9,6 +9,7 @@
 #define MATRIXMATH_H
 
 #include <stdarg.h>
+#include "mathlib/dbg.h"
 
 // The operations in this file can perform basic matrix operations on matrices represented
 // using any class that supports the necessary operations:
@@ -171,7 +172,7 @@ namespace MatrixMath
 
 		FORCEINLINE float Element( int nRow, int nCol ) const
 		{
-			Assert( nCol == 0 );
+			MathlibAssert( nCol == 0 );
 			return m_pMatrix->Element( m_nRow, nRow );
 		}
 
@@ -194,7 +195,7 @@ namespace MatrixMath
 
 		FORCEINLINE float Element( int nRow, int nColumn ) const
 		{
-			Assert( nColumn == 0 );
+			MathlibAssert( nColumn == 0 );
 			return m_pMatrix->Element( nRow, m_nColumn );
 		}
 
@@ -250,9 +251,9 @@ namespace MatrixMath
 	template<class MATRIXACCESSORATYPE, class MATRIXACCESSORBTYPE >
 	float InnerProduct( MATRIXACCESSORATYPE const &vecA, MATRIXACCESSORBTYPE const &vecB )
 	{
-		Assert( vecA.Width() == 1 );
-		Assert( vecB.Width() == 1 );
-		Assert( vecA.Height() == vecB.Height() );
+		MathlibAssert( vecA.Width() == 1 );
+		MathlibAssert( vecB.Width() == 1 );
+		MathlibAssert( vecA.Height() == vecB.Height() );
 		double flResult = 0;
 		for( int i = 0; i < vecA.Height(); i++ )
 		{
@@ -267,7 +268,7 @@ namespace MatrixMath
 	template<class MATRIXATYPE, class MATRIXBTYPE, class MATRIXOUTTYPE>
 	void MatrixMultiply( MATRIXATYPE const &matA, MATRIXBTYPE const &matB, MATRIXOUTTYPE *pMatrixOut )
 	{
-		Assert( matA.Width() == matB.Height() );
+		MathlibAssert( matA.Width() == matB.Height() );
 		pMatrixOut->SetDimensions( matA.Height(), matB.Width() );
 		for( int i = 0; i < matA.Height(); i++ )
 		{
@@ -374,7 +375,7 @@ public:
 	FORCEINLINE int Height( void ) const { return NUMROWS; }
 	FORCEINLINE float Element( int nRow, int nCol ) const { return m_flValues[nRow][nCol]; }
 	FORCEINLINE void SetElement( int nRow, int nCol, float flValue ) { m_flValues[nRow][nCol] = flValue; }
-	FORCEINLINE void SetDimensions( int nNumRows, int nNumCols ) { Assert( ( nNumRows == NUMROWS ) && ( nNumCols == NUMCOLS ) ); }
+	FORCEINLINE void SetDimensions( int nNumRows, int nNumCols ) { MathlibAssert( ( nNumRows == NUMROWS ) && ( nNumCols == NUMCOLS ) ); }
 
 private:
 	float m_flValues[NUMROWS][NUMCOLS];

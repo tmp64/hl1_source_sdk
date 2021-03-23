@@ -15,6 +15,7 @@
 
 #include <math.h>
 #include <float.h>
+#include "mathlib/dbg.h"
 
 // see http://mathworld.wolfram.com/SphericalTrigonometry.html
 
@@ -22,8 +23,8 @@
 FORCEINLINE float UnitSphereLineSegmentLength( Vector const &a, Vector const &b )
 {
 	// check unit length
-	Assert( fabs( VectorLength( a ) - 1.0 ) < 1.0e-3 );
-	Assert( fabs( VectorLength( b ) - 1.0 ) < 1.0e-3 );
+	MathlibAssert( fabs( VectorLength( a ) - 1.0 ) < 1.0e-3 );
+	MathlibAssert( fabs( VectorLength( b ) - 1.0 ) < 1.0e-3 );
 	return acos( DotProduct( a, b ) );
 }
 

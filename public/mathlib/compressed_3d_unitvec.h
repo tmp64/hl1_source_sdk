@@ -8,6 +8,7 @@
 #ifndef _3D_UNITVEC_H
 #define _3D_UNITVEC_H
 
+#include <mathlib/dbg.h>
 
 #define UNITVEC_DECLARE_STATICS \
    float cUnitVector::mUVAdjustment[0x2000]; \
@@ -56,11 +57,11 @@ public:
    {
       // convert from Vector to cUnitVector
 
-      Assert( vec.IsValid());
+      MathlibAssert( vec.IsValid());
       Vector tmp = vec;
 
       // input vector does not have to be unit length
-      // Assert( tmp.length() <= 1.001f );
+      // MathlibAssert( tmp.length() <= 1.001f );
 
       mVec = 0;
       if ( tmp.x < 0 ) { mVec |= XSIGN_MASK; tmp.x = -tmp.x; }
@@ -78,10 +79,10 @@ public:
       long xbits = (long)( tmp.x * w );
       long ybits = (long)( tmp.y * w );
 
-      Assert( xbits <  127 );
-      Assert( xbits >= 0   );
-      Assert( ybits <  127 );
-      Assert( ybits >= 0   );
+      MathlibAssert( xbits <  127 );
+      MathlibAssert( xbits >= 0   );
+      MathlibAssert( ybits <  127 );
+      MathlibAssert( ybits >= 0   );
 
       // Now we can be sure that 0<=xp<=126, 0<=yp<=126, 0<=xp+yp<=126
       // however for the sampling we want to transform this triangle
@@ -132,7 +133,7 @@ public:
       if ( mVec & YSIGN_MASK ) vec.y = -vec.y;
       if ( mVec & ZSIGN_MASK ) vec.z = -vec.z;
 
-      Assert( vec.IsValid());
+      MathlibAssert( vec.IsValid());
    }
 
    static void initializeStatics()
@@ -156,7 +157,7 @@ public:
 		
          // calculate the amount of normalization required
          mUVAdjustment[idx] = 1.0f / sqrtf( y*y + z*z + x*x );
-         Assert( _finite( mUVAdjustment[idx]));
+         MathlibAssert( _finite( mUVAdjustment[idx]));
 
          //cerr << mUVAdjustment[idx] << "\t";
          //if ( xbits == 0 ) cerr << "\n";

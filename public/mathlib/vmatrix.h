@@ -31,6 +31,7 @@
 #endif
 
 #include <string.h>
+#include "mathlib/dbg.h"
 #include "mathlib/vector.h"
 #include "mathlib/vplane.h"
 #include "mathlib/vector4d.h"
@@ -829,7 +830,7 @@ inline VMatrix VMatrix::operator~() const
 //-----------------------------------------------------------------------------
 inline void MatrixGetColumn( const VMatrix &src, int nCol, Vector *pColumn )
 {
-	Assert( (nCol >= 0) && (nCol <= 3) );
+	MathlibAssert( (nCol >= 0) && (nCol <= 3) );
 
 	pColumn->x = src[0][nCol];
 	pColumn->y = src[1][nCol];
@@ -838,7 +839,7 @@ inline void MatrixGetColumn( const VMatrix &src, int nCol, Vector *pColumn )
 
 inline void MatrixSetColumn( VMatrix &src, int nCol, const Vector &column )
 {
-	Assert( (nCol >= 0) && (nCol <= 3) );
+	MathlibAssert( (nCol >= 0) && (nCol <= 3) );
 
 	src.m[0][nCol] = column.x;
 	src.m[1][nCol] = column.y;
@@ -847,13 +848,13 @@ inline void MatrixSetColumn( VMatrix &src, int nCol, const Vector &column )
 
 inline void MatrixGetRow( const VMatrix &src, int nRow, Vector *pRow )
 {
-	Assert( (nRow >= 0) && (nRow <= 3) );
+	MathlibAssert( (nRow >= 0) && (nRow <= 3) );
 	*pRow = *(Vector*)src[nRow];
 }
 
 inline void MatrixSetRow( VMatrix &dst, int nRow, const Vector &row )
 {
-	Assert( (nRow >= 0) && (nRow <= 3) );
+	MathlibAssert( (nRow >= 0) && (nRow <= 3) );
 	*(Vector*)dst[nRow] = row;
 }
 
