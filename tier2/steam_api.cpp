@@ -170,6 +170,7 @@ void SteamAPI_InitForGoldSrc()
 
 	g_bIsInited = true;
 
+#ifndef NO_STEAM
 #ifdef SOURCE_SDK_MIN_STEAM_API
 	LoadSteamAPIFuncsInRuntime();
 #endif
@@ -178,6 +179,7 @@ void SteamAPI_InitForGoldSrc()
 		return;
 
 	LoadSteamClient017();
+#endif
 }
 
 //------------------------------------------------------------------

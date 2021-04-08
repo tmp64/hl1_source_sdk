@@ -160,6 +160,7 @@ protected:
 	vgui2::Menu *m_pContextMenu;
 
 private:
+#ifndef NO_STEAM
 	STEAM_CALLBACK( HTML, BrowserNeedsPaint, HTML_NeedsPaint_t, m_NeedsPaint );
 	STEAM_CALLBACK( HTML, BrowserStartRequest, HTML_StartRequest_t, m_StartRequest );
 	STEAM_CALLBACK( HTML, BrowserURLChanged, HTML_URLChanged_t, m_URLChanged );
@@ -181,6 +182,7 @@ private:
 	STEAM_CALLBACK( HTML, BrowserShowToolTip, HTML_ShowToolTip_t, m_ShowTooltip );
 	STEAM_CALLBACK( HTML, BrowserUpdateToolTip, HTML_UpdateToolTip_t, m_UpdateTooltip );
 	STEAM_CALLBACK( HTML, BrowserHideToolTip, HTML_HideToolTip_t, m_HideTooltip );
+#endif
 
 	void OnBrowserReady( HTML_BrowserReady_t *pBrowserReady, bool bIOFailure );
 
@@ -315,7 +317,10 @@ private:
 
 	CSteamAPIContext m_SteamAPIContext;
 	HHTMLBrowser m_unBrowserHandle;
+
+#ifndef NO_STEAM
 	CCallResult< HTML, HTML_BrowserReady_t > m_SteamCallResultBrowserReady;
+#endif
 };
 
 } // namespace vgui2

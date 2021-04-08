@@ -112,28 +112,31 @@ private:
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 //-----------------------------------------------------------------------------
-HTML::HTML(Panel *parent, const char *name, bool allowJavaScript, bool bPopupWindow) : Panel(parent, name), 
-m_NeedsPaint( this, &HTML::BrowserNeedsPaint ),
-m_StartRequest( this, &HTML::BrowserStartRequest ),
-m_URLChanged( this, &HTML::BrowserURLChanged ),
-m_FinishedRequest( this, &HTML::BrowserFinishedRequest ),
-m_LinkInNewTab( this, &HTML::BrowserOpenNewTab ),
-m_ChangeTitle( this, &HTML::BrowserSetHTMLTitle ),
-m_NewWindow( this, &HTML::BrowserPopupHTMLWindow ),
-m_FileLoadDialog( this, &HTML::BrowserFileLoadDialog ),
-m_SearchResults( this, &HTML::BrowserSearchResults ),
-m_CloseBrowser( this, &HTML::BrowserClose ),
-m_HorizScroll( this, &HTML::BrowserHorizontalScrollBarSizeResponse ),
-m_VertScroll( this, &HTML::BrowserVerticalScrollBarSizeResponse ),
-m_LinkAtPosResp( this, &HTML::BrowserLinkAtPositionResponse ),
-m_JSAlert( this, &HTML::BrowserJSAlert ),
-m_JSConfirm( this, &HTML::BrowserJSConfirm ),
-m_CanGoBackForward( this, &HTML::BrowserCanGoBackandForward ),
-m_SetCursor( this, &HTML::BrowserSetCursor ),
-m_StatusText( this, &HTML::BrowserStatusText ),
-m_ShowTooltip( this, &HTML::BrowserShowToolTip ),
-m_UpdateTooltip( this, &HTML::BrowserUpdateToolTip ),
-m_HideTooltip( this, &HTML::BrowserHideToolTip )
+HTML::HTML(Panel *parent, const char *name, bool allowJavaScript, bool bPopupWindow)
+    : Panel(parent, name)
+#ifndef NO_STEAM
+    , m_NeedsPaint(this, &HTML::BrowserNeedsPaint)
+    , m_StartRequest(this, &HTML::BrowserStartRequest)
+    , m_URLChanged(this, &HTML::BrowserURLChanged)
+    , m_FinishedRequest(this, &HTML::BrowserFinishedRequest)
+    , m_LinkInNewTab(this, &HTML::BrowserOpenNewTab)
+    , m_ChangeTitle(this, &HTML::BrowserSetHTMLTitle)
+    , m_NewWindow(this, &HTML::BrowserPopupHTMLWindow)
+    , m_FileLoadDialog(this, &HTML::BrowserFileLoadDialog)
+    , m_SearchResults(this, &HTML::BrowserSearchResults)
+    , m_CloseBrowser(this, &HTML::BrowserClose)
+    , m_HorizScroll(this, &HTML::BrowserHorizontalScrollBarSizeResponse)
+    , m_VertScroll(this, &HTML::BrowserVerticalScrollBarSizeResponse)
+    , m_LinkAtPosResp(this, &HTML::BrowserLinkAtPositionResponse)
+    , m_JSAlert(this, &HTML::BrowserJSAlert)
+    , m_JSConfirm(this, &HTML::BrowserJSConfirm)
+    , m_CanGoBackForward(this, &HTML::BrowserCanGoBackandForward)
+    , m_SetCursor(this, &HTML::BrowserSetCursor)
+    , m_StatusText(this, &HTML::BrowserStatusText)
+    , m_ShowTooltip(this, &HTML::BrowserShowToolTip)
+    , m_UpdateTooltip(this, &HTML::BrowserUpdateToolTip)
+    , m_HideTooltip(this, &HTML::BrowserHideToolTip)
+#endif
 {
 	m_iHTMLTextureID = 0;
 	m_bCanGoBack = false;
@@ -148,6 +151,8 @@ m_HideTooltip( this, &HTML::BrowserHideToolTip )
 	SetPostChildPaintEnabled( true );
 
 	m_unBrowserHandle = INVALID_HTMLBROWSER;
+
+#ifndef NO_STEAM
 	m_SteamAPIContext.Init();
 	if ( m_SteamAPIContext.SteamHTMLSurface() )
 	{
@@ -159,6 +164,8 @@ m_HideTooltip( this, &HTML::BrowserHideToolTip )
 	{
 		Warning("Unable to access SteamHTMLSurface\n");
 	}
+#endif
+
 	m_iScrollBorderX=m_iScrollBorderY=0;
 	m_bScrollBarEnabled = true;
 	m_bContextMenuEnabled = true; 
@@ -1222,7 +1229,7 @@ void HTML::CHTMLFindBar::OnCommand( const char *pchCmd )
 
 }
 
-
+#ifndef NO_STEAM
 //-----------------------------------------------------------------------------
 // Purpose: we have a new texture to update
 //-----------------------------------------------------------------------------
@@ -1268,6 +1275,7 @@ void HTML::BrowserNeedsPaint( HTML_NeedsPaint_t *pCallback )
 	// need a paint next time
 	Repaint();
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: browser wants to start loading this url, do we let it?
@@ -1324,6 +1332,7 @@ bool HTML::OnStartRequest( const char *url, const char *target, const char *pchP
 	return true;
 }
 
+#ifndef NO_STEAM
 //-----------------------------------------------------------------------------
 // Purpose: callback from cef thread, load a url please
 //-----------------------------------------------------------------------------
@@ -1565,7 +1574,6 @@ void HTML::BrowserSetCursor( HTML_SetCursor_t *pCmd )
 	SetCursor( cursor );
 }
 
-
 //-----------------------------------------------------------------------------
 // Purpose: browser telling to show the file loading dialog
 //-----------------------------------------------------------------------------
@@ -1750,7 +1758,7 @@ void HTML::BrowserJSConfirm( HTML_JSConfirm_t *pCmd )
 	pDlg->SetCancelCommand( new KeyValues( "DismissJSDialog", "result", false ) );
 	pDlg->DoModal();
 }
-
+#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: got an answer from the dialog, tell cef
@@ -1761,7 +1769,7 @@ void HTML::DismissJSDialog( int bResult )
 		m_SteamAPIContext.SteamHTMLSurface()->JSDialogResponse( m_unBrowserHandle, bResult );
 };
 
-
+#ifndef NO_STEAM
 //-----------------------------------------------------------------------------
 // Purpose: browser telling us the state of back and forward buttons
 //-----------------------------------------------------------------------------
@@ -1770,7 +1778,7 @@ void HTML::BrowserCanGoBackandForward( HTML_CanGoBackAndForward_t *pCmd )
 	m_bCanGoBack = pCmd->bCanGoBack;
 	m_bCanGoForward = pCmd->bCanGoForward;
 }
-
+#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: ask the browser for what is at this x,y
