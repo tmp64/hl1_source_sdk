@@ -6195,13 +6195,16 @@ public:
 	}
 };
 
-// GoldSrc: Not supported
-#if 0
 class CHFontProperty : public vgui2::IPanelAnimationPropertyConverter
 {
 public:
 	virtual void GetData( Panel *panel, KeyValues *kv, PanelAnimationMapEntry *entry )
 	{
+		// GoldSrc: scheme->GetFontName doesn't exist
+		Msg("CHFontProperty: panel '%s' tried to save font animation variable '%s'. Saving default value instead.\n",
+			panel->GetName(), entry->name());
+		kv->SetString(entry->name(), entry->defaultvalue());
+#if 0
 		vgui2::IScheme *scheme = vgui2::scheme()->GetIScheme( panel->GetScheme() );
 		Assert( scheme );
 		if ( scheme )
@@ -6210,6 +6213,7 @@ public:
 			char const *fontName = scheme->GetFontName( *(HFont *)data );
 			kv->SetString( entry->name(), fontName );
 		}
+#endif
 	}
 	
 	virtual void SetData( Panel *panel, KeyValues *kv, PanelAnimationMapEntry *entry )
@@ -6235,7 +6239,6 @@ public:
 		}
 	}
 };
-#endif
 
 // GoldSrc: Works for vars that never change (e.g. border corners).
 // GoldSrc: Not tested for animated vars.
@@ -6359,7 +6362,7 @@ static CProportionalIntWithScreenspacePropertyY p_screenspace_intconverter_Y;
 static CColorProperty colorconverter;
 static CBoolProperty boolconverter;
 static CStringProperty stringconverter;
-//static CHFontProperty fontconverter;
+static CHFontProperty fontconverter;
 static CTextureIdProperty textureidconverter;
 //static CProportionalXPosProperty xposconverter;
 //static CProportionalYPosProperty yposconverter;
@@ -6405,11 +6408,8 @@ void Panel::InitPropertyConverters( void )
 	AddPropertyConverter( "bool", &boolconverter );
 	AddPropertyConverter( "char", &stringconverter );
 	AddPropertyConverter( "string", &stringconverter );
-	// GoldSrc:
-#if 0
 	AddPropertyConverter( "HFont", &fontconverter );
 	AddPropertyConverter( "vgui2::HFont", &fontconverter );
-#endif
 
 	// This is an aliased type for proportional float
 	AddPropertyConverter( "proportional_float", &p_floatconverter );
