@@ -22,6 +22,8 @@
 #endif
 #endif
 
+#include <set>
+#include <string>
 #include "utlvector.h"
 #include "Color.h"
 
@@ -95,13 +97,16 @@ public:
 
 	// File access.
 	virtual bool LoadFromFile( IFileSystem *filesystem, const char *resourceName, const char *pathID = NULL );
-	virtual bool SaveToFile( IFileSystem *filesystem, const char *resourceName, const char *pathID = NULL);
+	virtual bool SaveToFile( IFileSystem *filesystem, const char *resourceName, const char *pathID = NULL );
+
+	// Loads from file, puts all includes/bases into fileList if it's not null.
+	bool LoadFromFile( IFileSystem *filesystem, const char *resourceName, const char *pathID, std::set<std::string> *fileList );
 
 	// Read from a buffer...  Note that the buffer must be null terminated
-	bool LoadFromBuffer( char const *resourceName, const char *pBuffer, IFileSystem* pFileSystem = NULL, const char *pPathID = NULL );
+	bool LoadFromBuffer( char const *resourceName, const char *pBuffer, IFileSystem *pFileSystem = NULL, const char *pPathID = NULL, std::set<std::string> *fileList = nullptr );
 
 	// Read from a utlbuffer...
-	bool LoadFromBuffer( char const *resourceName, CUtlBuffer &buf, IFileSystem* pFileSystem = NULL, const char *pPathID = NULL );
+	bool LoadFromBuffer( char const *resourceName, CUtlBuffer &buf, IFileSystem *pFileSystem = NULL, const char *pPathID = NULL, std::set<std::string> *fileList = nullptr );
 
 	// Find a keyValue, create it if it is not found.
 	// Set bCreate to true to create the key if it doesn't already exist (which ensures a valid pointer will be returned)
@@ -241,7 +246,8 @@ private:
 	// For handling #include "filename"
 	void AppendIncludedKeys( CUtlVector< KeyValues * >& includedKeys );
 	void ParseIncludedKeys( char const *resourceName, const char *filetoinclude, 
-							IFileSystem* pFileSystem, const char *pPathID, CUtlVector< KeyValues * >& includedKeys );
+							IFileSystem* pFileSystem, const char *pPathID, CUtlVector< KeyValues * >& includedKeys,
+							std::set<std::string> *fileList = nullptr );
 
 	// For handling #base "filename"
 	void MergeBaseKeys( CUtlVector< KeyValues * >& baseKeys );

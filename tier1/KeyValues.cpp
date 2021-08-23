@@ -448,9 +448,17 @@ const char *KeyValues::ReadToken( CUtlBuffer &buf, bool &wasQuoted, bool &wasCon
 }
 
 //-----------------------------------------------------------------------------
+// Purpose: Load keyValues from disk without saving the list of included files
+//-----------------------------------------------------------------------------
+bool KeyValues::LoadFromFile(IBaseFileSystem *filesystem, const char *resourceName, const char *pathID)
+{
+	return LoadFromFile(filesystem, resourceName, pathID, nullptr);
+}
+
+//-----------------------------------------------------------------------------
 // Purpose: Load keyValues from disk
 //-----------------------------------------------------------------------------
-bool KeyValues::LoadFromFile( IBaseFileSystem *filesystem, const char *resourceName, const char *pathID )
+bool KeyValues::LoadFromFile( IBaseFileSystem *filesystem, const char *resourceName, const char *pathID, std::set<std::string> *fileList )
 {
 	Assert(filesystem);
 	Assert( IsX360() || ( IsPC() && _heapchk() == _HEAPOK ) );
@@ -477,7 +485,8 @@ bool KeyValues::LoadFromFile( IBaseFileSystem *filesystem, const char *resourceN
 
 	filesystem->Close( f );	// close file after reading
 
-	bool retOK = LoadFromBuffer( resourceName, buffer, filesystem );
+	// TODO: shouldn't it pass pathID instead of nullptr?
+	bool retOK = LoadFromBuffer( resourceName, buffer, filesystem, nullptr, fileList );
 
 	delete[] buffer;
 
@@ -1669,7 +1678,8 @@ void KeyValues::AppendIncludedKeys( CUtlVector< KeyValues * >& includedKeys )
 }
 
 void KeyValues::ParseIncludedKeys( char const *resourceName, const char *filetoinclude, 
-		IBaseFileSystem* pFileSystem, const char *pPathID, CUtlVector< KeyValues * >& includedKeys )
+		IBaseFileSystem* pFileSystem, const char *pPathID, CUtlVector< KeyValues * >& includedKeys,
+		std::set<std::string> *fileList )
 {
 	Assert( resourceName );
 	Assert( filetoinclude );
@@ -1708,6 +1718,9 @@ void KeyValues::ParseIncludedKeys( char const *resourceName, const char *filetoi
 
 	// Append included file
 	Q_strncat( fullpath, filetoinclude, sizeof( fullpath ), COPY_ALL_CHARACTERS );
+
+	if (fileList)
+		fileList->insert(fullpath);
 
 	KeyValues *newKV = new KeyValues( fullpath );
 
@@ -1786,7 +1799,7 @@ void KeyValues::RecursiveMergeKeyValues( KeyValues *baseKV )
 //-----------------------------------------------------------------------------
 // Read from a buffer...
 //-----------------------------------------------------------------------------
-bool KeyValues::LoadFromBuffer( char const *resourceName, CUtlBuffer &buf, IBaseFileSystem* pFileSystem, const char *pPathID )
+bool KeyValues::LoadFromBuffer( char const *resourceName, CUtlBuffer &buf, IBaseFileSystem* pFileSystem, const char *pPathID, std::set<std::string> *fileList )
 {
 	KeyValues *pPreviousKey = NULL;
 	KeyValues *pCurrentKey = this;
@@ -1815,7 +1828,7 @@ bool KeyValues::LoadFromBuffer( char const *resourceName, CUtlBuffer &buf, IBase
 			}
 			else
 			{
-				ParseIncludedKeys( resourceName, s, pFileSystem, pPathID, includedKeys );
+				ParseIncludedKeys( resourceName, s, pFileSystem, pPathID, includedKeys, fileList );
 			}
 
 			continue;
@@ -1831,7 +1844,7 @@ bool KeyValues::LoadFromBuffer( char const *resourceName, CUtlBuffer &buf, IBase
 			}
 			else
 			{
-				ParseIncludedKeys( resourceName, s, pFileSystem, pPathID, baseKeys );
+				ParseIncludedKeys( resourceName, s, pFileSystem, pPathID, baseKeys, fileList );
 			}
 
 			continue;
@@ -1921,14 +1934,14 @@ bool KeyValues::LoadFromBuffer( char const *resourceName, CUtlBuffer &buf, IBase
 //-----------------------------------------------------------------------------
 // Read from a buffer...
 //-----------------------------------------------------------------------------
-bool KeyValues::LoadFromBuffer( char const *resourceName, const char *pBuffer, IBaseFileSystem* pFileSystem, const char *pPathID )
+bool KeyValues::LoadFromBuffer( char const *resourceName, const char *pBuffer, IBaseFileSystem* pFileSystem, const char *pPathID, std::set<std::string> *fileList )
 {
 	if ( !pBuffer || !pBuffer[0])
 		return true;
 
 	int nLen = Q_strlen( pBuffer );
 	CUtlBuffer buf( pBuffer, nLen, CUtlBuffer::READ_ONLY | CUtlBuffer::TEXT_BUFFER );
-	return LoadFromBuffer( resourceName, buf, pFileSystem, pPathID );
+	return LoadFromBuffer( resourceName, buf, pFileSystem, pPathID, fileList );
 }
 
 
