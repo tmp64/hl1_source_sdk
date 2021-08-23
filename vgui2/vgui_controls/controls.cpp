@@ -105,7 +105,7 @@ public:
 		 * It will only do that if file was changed since last time it was compiled.
 		 */
 
-		constexpr int SCHEME_VERSION = 1;
+		constexpr int SCHEME_VERSION = 2;
 
 		char fileNameComp[256];
 		snprintf(fileNameComp, sizeof(fileNameComp), "%s.i", fileName);
@@ -116,13 +116,36 @@ public:
 		// Try to open compiled file
 		bool bNeedRecompile = false;
 		KeyValues *compiled = new KeyValues("Scheme");
+
 		if (compiled->LoadFromFile(g_pFullFileSystem, fileNameComp, pathID))
 		{
 			// Check modification date and version
 			int modDate = compiled->GetInt("OrigModDate");
 			int version = compiled->GetInt("PreprocessorVersion", 0);
 			if (origModDate == 0 || modDate == 0 || origModDate != modDate || version != SCHEME_VERSION)
+			{
 				bNeedRecompile = true;
+			}
+			else
+			{
+				// Also check includes
+				KeyValues *includes = compiled->FindKey("Includes");
+
+				if (includes)
+				{
+					for (KeyValues *sub = includes->GetFirstValue(); sub; sub = sub->GetNextValue())
+					{
+						const char *includeName= sub->GetName();
+						int date = sub->GetInt();
+
+						if (date != g_pFullFileSystem->GetFileTime(includeName))
+						{
+							bNeedRecompile = true;
+							break;
+						}
+					}
+				}
+			}
 		}
 		else
 		{
@@ -137,11 +160,29 @@ public:
 
 			// Load original file
 			KeyValuesAD orig(new KeyValues("Scheme"));
-			if (orig->LoadFromFile(g_pFullFileSystem, fileName, pathID))
+			std::set<std::string> includeList;
+
+			if (orig->LoadFromFile(g_pFullFileSystem, fileName, pathID, &includeList))
 			{
 				// Set modification date and version
 				orig->SetInt("OrigModDate", origModDate);
 				orig->SetInt("PreprocessorVersion", SCHEME_VERSION);
+
+				// Save all include dates as well
+				KeyValues *includes = new KeyValues("Includes");
+
+				for (const std::string &i : includeList)
+				{
+					int date = g_pFullFileSystem->GetFileTime(i.c_str());
+
+					// A hack so we can have slashes in the key name
+					// Otherwise they would've been parsed as a path
+					KeyValues *kv = new KeyValues(i.c_str());
+					kv->SetInt(nullptr, date);
+					includes->AddSubKey(kv);
+				}
+
+				orig->AddSubKey(includes);
 
 				// Save new file
 				char dir[256];
