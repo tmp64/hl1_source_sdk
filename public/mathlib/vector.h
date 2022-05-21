@@ -75,6 +75,17 @@ public:
 	Vector(vec_t X, vec_t Y, vec_t Z);
 	explicit Vector(vec_t XYZ); ///< broadcast initialize
 
+#ifdef MATHLIB_VECTOR_NONTRIVIAL
+	// Explicitly define copy constructor to make class non-trivial.
+	// Prevents the compiler from passing it in registers to maintain ABI with HL.
+	inline Vector(const Vector &v)
+	{
+		x = v.x;
+		y = v.y;
+		z = v.z;
+	}
+#endif
+
 	inline Vector(float rgfl[3])
 	{
 		x = rgfl[0];
