@@ -292,8 +292,8 @@ public:
 	//virtual bool IsFontAdditive(HFont font) = 0;
 	virtual void GetCharABCwide(HFont font, int ch, int &a, int &b, int &c) = 0;
 	virtual int GetCharacterWidth(HFont font, int ch) = 0;
-	virtual int GetFontBlur(HFont font);
-	virtual bool IsAdditive(HFont font);
+	virtual int GetFontBlur(HFont font) = 0;
+	virtual bool IsAdditive(HFont font) = 0;
 	virtual void GetTextSize(HFont font, const wchar_t *text, int &wide, int &tall) = 0;
 
 	// notify icons?!?
@@ -327,7 +327,7 @@ public:
 
 	// gets the base resolution used in proportional mode
 	virtual void GetProportionalBase( int &width, int &height ) = 0;
-    virtual void SetProportionalBase(int width, int height);
+    virtual void SetProportionalBase(int width, int height) = 0;
 
 	virtual void CalculateMouseVisible() = 0;
 	virtual bool NeedKBInput() = 0;
