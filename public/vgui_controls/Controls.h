@@ -25,10 +25,17 @@
 namespace vgui2
 {
 
+//! Proportional scale override callback.
+//! @returns The scale factor.
+using ProportionalScaleFn = float (*)();
+
 // handles the initialization of the vgui interfaces
 // interfaces (listed below) are first attempted to be loaded from primaryProvider, then secondaryProvider
 // moduleName should be the name of the module that this instance of the vgui_controls has been compiled into
 bool VGui_InitInterfacesList( const char *moduleName, CreateInterfaceFn *factoryList, int numFactories );
+
+//! Overrides the proportional scale for the app.
+void VGui_SetProportionalScaleCallback(ProportionalScaleFn pCallback);
 
 /**
  * Returns default scheme that should be used by any panels created in this module.
