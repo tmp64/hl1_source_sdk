@@ -44,6 +44,9 @@ public:
 	// Set the draw color 
 	virtual void SetColor( Color col) = 0;
 
+	// Sets whether additive rendering should be used.
+	virtual void SetAdditive(bool bAdditive) {}
+
 	// virtual destructor
 	virtual ~IImage() {}
 };

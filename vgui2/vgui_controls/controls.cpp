@@ -65,6 +65,11 @@ public:
 		return m_pEngineIface->Shutdown(full);
 	}
 
+	virtual float GetProportionalScale()
+	{
+		return m_pEngineIface->GetProportionalScale();
+	}
+
 	virtual int GetProportionalScaledValue(int normalizedValue)
 	{
 		return m_pEngineIface->GetProportionalScaledValue(normalizedValue);

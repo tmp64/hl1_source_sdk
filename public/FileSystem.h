@@ -238,6 +238,7 @@ public:
 	*	@return Timestamp, or 0 if the file could not be queried for information.
 	*/
 	virtual long			GetFileTime( const char *pFileName ) = 0;
+	virtual long			GetFileModificationTime(const char* pFileName) = 0;
 
 	/**
 	*	Converts the given file time to a string. The resulting string produces output as if the CRT function ctime were used.
