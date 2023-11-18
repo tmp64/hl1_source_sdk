@@ -55,6 +55,17 @@ extern vgui2::ILocalize *g_pVGuiLocalize;
 extern vgui2::ISchemeManager *g_pVGuiSchemeManager;
 extern vgui2::ISystem *g_pVGuiSystem;
 
+//! This is the pointer to the original engine file system.
+//! It must be used instead of g_pFullFileSystem or vgui2::filesystem()
+//! when calling any funcitons in vgui2::ILocalize.
+//! 
+//! Never use it directly!
+//! 
+//! BugfixedHL-Rebased overrides g_pFullFileSystem with a compatibility wrapper to support
+//! engine builds before 9884 (25th Anniversary Update).
+//! Passing this wrapper to VGUI2 interfaces causes a crash.
+extern IFileSystem *g_pEngineFileSystem;
+
 // These interfaces are exposed by GameUI.dll for the engine (hw.dll/sw.dll)
 // They are not supposed to be called directly.
 // Define TIER2_GAMEUI_INTERNALS if you really need them.

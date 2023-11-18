@@ -544,6 +544,9 @@ public:
 */
 #define FILESYSTEM_INTERFACE_VERSION "VFileSystem009"
 
+//! Fake interface name for the engine filesystem.
+#define FILESYSTEM_INTERFACE_VERSION_ENGINE "HL1_SRC_SDK_EngineFilesystem"
+
 /** @} */
 
 #endif // FILESYSTEM_H

@@ -30,6 +30,8 @@ vgui2::ILocalize *g_pVGuiLocalize;
 vgui2::ISchemeManager *g_pVGuiSchemeManager;
 vgui2::ISystem *g_pVGuiSystem;
 
+IFileSystem *g_pEngineFileSystem;
+
 static bool s_bConnected = false;
 void SteamAPI_InitForGoldSrc();
 
@@ -102,6 +104,16 @@ void ConnectTier2Libraries(CreateInterfaceFn *pFactoryList, int nFactoryCount)
 		{
 			g_pVGuiSystem = (vgui2::ISystem *)pFactoryList[i](VGUI_SYSTEM_INTERFACE_VERSION_GS, NULL);
 		}
+		if (!g_pEngineFileSystem)
+		{
+			g_pEngineFileSystem = (IFileSystem *)pFactoryList[i](FILESYSTEM_INTERFACE_VERSION_ENGINE, NULL);
+		}
+	}
+
+	if (!g_pEngineFileSystem)
+	{
+		// Hope for the best
+		g_pEngineFileSystem = g_pFullFileSystem;
 	}
 }
 

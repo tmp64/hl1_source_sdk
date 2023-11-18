@@ -1371,7 +1371,7 @@ void BuildModeDialog::OnShowNewControlMenu()
 void BuildModeDialog::OnReloadLocalization()
 {
 	// reload localization files
-	g_pVGuiLocalize->ReloadLocalizationFiles(g_pFullFileSystem);
+	g_pVGuiLocalize->ReloadLocalizationFiles(g_pEngineFileSystem);
 }
 
 bool BuildModeDialog::IsBuildGroupEnabled()
