@@ -25,10 +25,18 @@
 namespace vgui2
 {
 
+//! Proportional scale override callback.
+//! @param	wide	Base width.
+//! @param	tall	Base height.
+using ProportionalBaseFn = void (*)(int &wide, int &tall);
+
 // handles the initialization of the vgui interfaces
 // interfaces (listed below) are first attempted to be loaded from primaryProvider, then secondaryProvider
 // moduleName should be the name of the module that this instance of the vgui_controls has been compiled into
 bool VGui_InitInterfacesList( const char *moduleName, CreateInterfaceFn *factoryList, int numFactories );
+
+//! Sets the proportional base callback. Used instead of ISurface::GetProportionalBase.
+void VGui_SetProportionalBaseCallback(ProportionalBaseFn pCallback);
 
 /**
  * Returns default scheme that should be used by any panels created in this module.
@@ -36,6 +44,10 @@ bool VGui_InitInterfacesList( const char *moduleName, CreateInterfaceFn *factory
  * Basic implementation can return 0.
  */
 HScheme VGui_GetDefaultScheme();
+
+//! Gets the base resolution for proportional scaling.
+//! Used instead of ISurface::GetProportionalBase.
+void VGui_GetProportionalBase(int &wide, int &tall);
 
 // returns the name of the module as specified above
 const char *GetControlsModuleName();

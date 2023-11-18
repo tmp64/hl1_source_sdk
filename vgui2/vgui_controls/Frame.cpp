@@ -1030,7 +1030,7 @@ void Frame::LayoutProportional( FrameButton *bt )
 		surface()->GetScreenSize( screenW, screenH );
 
 		int proW,proH;
-		surface()->GetProportionalBase( proW, proH );
+		VGui_GetProportionalBase(proW, proH);
 
 		scale =	( (float)( screenH ) / (float)( proH ) );
 	}
@@ -1268,7 +1268,7 @@ void Frame::PerformLayout()
 		surface()->GetScreenSize( screenW, screenH );
 
 		int proW,proH;
-		surface()->GetProportionalBase( proW, proH );
+		VGui_GetProportionalBase(proW, proH);
 
 		scale =	( (float)( screenH ) / (float)( proH ) );
 	}

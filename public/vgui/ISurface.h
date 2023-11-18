@@ -326,8 +326,9 @@ public:
 	virtual void GetAbsoluteWindowBounds(int &x, int &y, int &wide, int &tall) = 0;
 
 	// gets the base resolution used in proportional mode
+	// Use VGui_GetProportionalBase instead!!!
 	virtual void GetProportionalBase( int &width, int &height ) = 0;
-    virtual void SetProportionalBase(int width, int height) = 0;
+	virtual void SetProportionalBase( int width, int height ) = 0;
 
 	virtual void CalculateMouseVisible() = 0;
 	virtual bool NeedKBInput() = 0;

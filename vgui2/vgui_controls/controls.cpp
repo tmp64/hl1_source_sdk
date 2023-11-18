@@ -20,7 +20,7 @@ extern int g_nYou_Must_Add_Public_Vgui_Controls_Vgui_ControlsCpp_To_Your_Project
 namespace vgui2
 {
 
-class CSchemeManagerWrapper : public ISchemeManagerEx
+class CSchemeManagerWrapper final : public ISchemeManagerEx
 {
 public:
 	ISchemeManager *m_pEngineIface = nullptr;
@@ -67,17 +67,21 @@ public:
 
 	virtual float GetProportionalScale()
 	{
-		return m_pEngineIface->GetProportionalScale();
+		int wide, tall;
+		int propWide, propTall;
+		surface()->GetScreenSize(wide, tall);
+		VGui_GetProportionalBase(propWide, propTall);
+		return (float)tall / (double)propTall;
 	}
 
 	virtual int GetProportionalScaledValue(int normalizedValue)
 	{
-		return m_pEngineIface->GetProportionalScaledValue(normalizedValue);
+		return (int)(normalizedValue * GetProportionalScale());
 	}
 
 	virtual int GetProportionalNormalizedValue(int scaledValue)
 	{
-		return m_pEngineIface->GetProportionalNormalizedValue(scaledValue);
+		return (int)(scaledValue / GetProportionalScale());
 	}
 
 	// Methods from Source that are wrapped around GoldSrc methods
@@ -208,6 +212,7 @@ public:
 };
 
 static CSchemeManagerWrapper s_SchemeManagerWrapper;
+static ProportionalBaseFn s_ProportionalBaseCallback = nullptr;
 
 static char g_szControlsModuleName[256];
 
@@ -256,6 +261,19 @@ bool VGui_InitInterfacesList( const char *moduleName, CreateInterfaceFn *factory
 	s_SchemeManagerWrapper.m_pEngineIface = g_pVGuiSchemeManager;
 
 	return true;
+}
+
+void VGui_SetProportionalBaseCallback(ProportionalBaseFn pCallback)
+{
+	s_ProportionalBaseCallback = pCallback;
+}
+
+void VGui_GetProportionalBase(int &wide, int &tall)
+{
+	if (s_ProportionalBaseCallback)
+		s_ProportionalBaseCallback(wide, tall);
+	else
+		g_pVGuiSurface->GetProportionalBase(wide, tall);
 }
 
 //-----------------------------------------------------------------------------

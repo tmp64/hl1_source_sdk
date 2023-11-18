@@ -178,7 +178,7 @@ RichText::RichText(Panel *parent, const char *panelName) : BaseClass(parent, pan
 	{
 		int width, height;
 		int sw,sh;
-		surface()->GetProportionalBase( width, height );
+		VGui_GetProportionalBase(width, height);
 		surface()->GetScreenSize(sw, sh);
 		
 		_drawOffsetX = static_cast<int>( static_cast<float>( DRAW_OFFSET_X )*( static_cast<float>( sw )/ static_cast<float>( width )));
