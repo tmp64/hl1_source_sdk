@@ -20,9 +20,7 @@ extern int g_nYou_Must_Add_Public_Vgui_Controls_Vgui_ControlsCpp_To_Your_Project
 namespace vgui2
 {
 
-static ProportionalScaleFn s_ProportionalScaleCallback;
-
-class CSchemeManagerWrapper final : public ISchemeManagerEx
+class CSchemeManagerWrapper : public ISchemeManagerEx
 {
 public:
 	ISchemeManager *m_pEngineIface = nullptr;
@@ -69,20 +67,17 @@ public:
 
 	virtual float GetProportionalScale()
 	{
-		if (s_ProportionalScaleCallback)
-			return s_ProportionalScaleCallback();
-		else
-			return m_pEngineIface->GetProportionalScale();
+		return m_pEngineIface->GetProportionalScale();
 	}
 
 	virtual int GetProportionalScaledValue(int normalizedValue)
 	{
-		return (int)(normalizedValue * GetProportionalScale());
+		return m_pEngineIface->GetProportionalScaledValue(normalizedValue);
 	}
 
 	virtual int GetProportionalNormalizedValue(int scaledValue)
 	{
-		return (int)(scaledValue / GetProportionalScale());
+		return m_pEngineIface->GetProportionalNormalizedValue(scaledValue);
 	}
 
 	// Methods from Source that are wrapped around GoldSrc methods
@@ -261,11 +256,6 @@ bool VGui_InitInterfacesList( const char *moduleName, CreateInterfaceFn *factory
 	s_SchemeManagerWrapper.m_pEngineIface = g_pVGuiSchemeManager;
 
 	return true;
-}
-
-void VGui_SetProportionalScaleCallback(ProportionalScaleFn pCallback)
-{
-	s_ProportionalScaleCallback = pCallback;
 }
 
 //-----------------------------------------------------------------------------
