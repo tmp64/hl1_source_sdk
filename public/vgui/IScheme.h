@@ -86,9 +86,6 @@ public:
 	// unload all schemes
 	virtual void Shutdown( bool full = true ) = 0;
 
-	//! @returns The proportional scale value that is used in GetProportionalScaledValue and GetProportionalNormalizedValue.
-	virtual float GetProportionalScale() = 0;
-
 	// gets the proportional coordinates for doing screen-size independant panel layouts
 	// use these for font, image and panel size scaling (they all use the pixel height of the display for scaling)
 	virtual int GetProportionalScaledValue( int normalizedValue ) = 0;

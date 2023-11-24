@@ -65,15 +65,6 @@ public:
 		return m_pEngineIface->Shutdown(full);
 	}
 
-	virtual float GetProportionalScale()
-	{
-		int wide, tall;
-		int propWide, propTall;
-		surface()->GetScreenSize(wide, tall);
-		VGui_GetProportionalBase(propWide, propTall);
-		return (float)tall / (double)propTall;
-	}
-
 	virtual int GetProportionalScaledValue(int normalizedValue)
 	{
 		return (int)(normalizedValue * GetProportionalScale());
@@ -98,6 +89,15 @@ public:
 	virtual int GetProportionalNormalizedValueEx(HScheme scheme, int scaledValue)
 	{
 		return GetProportionalNormalizedValue(scaledValue);
+	}
+
+	virtual float GetProportionalScale()
+	{
+		int wide, tall;
+		int propWide, propTall;
+		surface()->GetScreenSize(wide, tall);
+		VGui_GetProportionalBase(propWide, propTall);
+		return (float)tall / (double)propTall;
 	}
 
 	virtual HScheme LoadSchemeFromFilePath(const char *fileName, const char *pathID, const char *tag)
