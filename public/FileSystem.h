@@ -533,6 +533,11 @@ public:
 	*	@see AddSearchPath
 	*/
 	virtual void			AddSearchPathNoWrite( const char *pPath, const char *pathID ) = 0;
+
+	// New in HL25 (linux build 9887)
+
+	//! @see GetFileModTime.
+	virtual long GetFileModificationTime(const char *pFileName) = 0;
 };
 
 // Steam3/Src compat

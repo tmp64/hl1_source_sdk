@@ -46,6 +46,9 @@ public:
 
 	// virtual destructor
 	virtual ~IImage() {}
+
+	// New in HL25 (linux build 9887)
+	virtual void SetAdditive(bool) {}
 };
 
 } // namespace vgui2

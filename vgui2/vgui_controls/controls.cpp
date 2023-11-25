@@ -67,12 +67,36 @@ public:
 
 	virtual int GetProportionalScaledValue(int normalizedValue)
 	{
+		// Custom implementation to allow custom proportional base.
 		return (int)(normalizedValue * GetProportionalScale());
 	}
 
 	virtual int GetProportionalNormalizedValue(int scaledValue)
 	{
+		// Custom implementation to allow custom proportional base.
 		return (int)(scaledValue / GetProportionalScale());
+	}
+
+	virtual float GetProportionalScale()
+	{
+		// Custom implementation to allow custom proportional base.
+		int wide, tall;
+		int propWide, propTall;
+		surface()->GetScreenSize(wide, tall);
+		VGui_GetProportionalBase(propWide, propTall);
+		return (float)tall / (double)propTall;
+	}
+
+	virtual int GetHDProportionalScaledValue(int normalizedValue)
+	{
+		// Use non-HD variant.
+		return GetProportionalScaledValue(normalizedValue);
+	}
+
+	virtual int GetHDProportionalNormalizedValue(int scaledValue)
+	{
+		// Use non-HD variant.
+		return GetProportionalNormalizedValue(scaledValue);
 	}
 
 	// Methods from Source that are wrapped around GoldSrc methods
@@ -89,15 +113,6 @@ public:
 	virtual int GetProportionalNormalizedValueEx(HScheme scheme, int scaledValue)
 	{
 		return GetProportionalNormalizedValue(scaledValue);
-	}
-
-	virtual float GetProportionalScale()
-	{
-		int wide, tall;
-		int propWide, propTall;
-		surface()->GetScreenSize(wide, tall);
-		VGui_GetProportionalBase(propWide, propTall);
-		return (float)tall / (double)propTall;
 	}
 
 	virtual HScheme LoadSchemeFromFilePath(const char *fileName, const char *pathID, const char *tag)

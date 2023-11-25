@@ -372,6 +372,17 @@ public:
 
 	virtual IHTMLChromeController *AccessChromeHTMLController() = 0;
 
+	// New in HL25 (linux build 9887)
+	virtual void DrawTexturedRectAdd(int x0, int y0, int x1, int y1) = 0;
+	virtual void SetSupportsEsc(bool bSupportsEsc) = 0;
+	virtual int GetFontBlur(vgui2::HFont font) = 0;
+	virtual bool IsAdditive(vgui2::HFont font) = 0;
+	virtual void SetProportionalBase(int width, int height) = 0;
+
+	// New in HL25 (linux build 9890)
+	virtual void GetHDProportionalBase(int &width, int &height) = 0;
+	virtual void SetHDProportionalBase(int nWidth, int nHeight) = 0;
+
 	//These *might* work, but will likely cause crashes due to interface compatibility issues. - Solokiller
 	/*
 	virtual bool setFullscreenMode( int wide, int tall, int bpp ) = 0;

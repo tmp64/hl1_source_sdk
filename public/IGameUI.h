@@ -28,6 +28,10 @@ public:
 	virtual void SetSecondaryProgressBarText(const char *statusText) = 0;
 	virtual void ValidateCDKey(bool, bool) = 0;
 	virtual void OnDisconnectFromServer(int eSteamLoginFailure, const char *username) = 0;
+
+	// New in HL25 (linux build 9885)
+	virtual void SetIsRunningOnSteamDeck(bool bIsRunningOnDeck) = 0;
+	virtual bool IsRunningOnSteamDeck() const = 0;
 };
 
 #define GAMEUI_INTERFACE_VERSION_GS "GameUI007"

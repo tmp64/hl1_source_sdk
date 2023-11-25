@@ -79,7 +79,7 @@ public:
 	*	@param piWindowed Whether the game is currently in windowed mode.
 	*	@param piHDModels Whether the game checks the _hd directory.
 	*	@param piAddonsFolder Whether the game checks the _addon directory.
-	*	@param piVidLevel Video level. Affects window scaling and anti aliasing.
+	*	@param piVidLevel Video level. Affects window scaling and anti aliasing (removed in HL25, linux build 9885).
 	*/
 	virtual void GetCurrentRenderer( char* pszName, int iNameLen, 
 									 int* piWindowed, int* piHDModels, 
