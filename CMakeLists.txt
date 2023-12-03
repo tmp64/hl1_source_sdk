@@ -2,7 +2,7 @@ cmake_minimum_required( VERSION 3.5.2 )
 
 project( hl1_source_sdk )
 
-
+set( CMAKE_FOLDER "Source SDK" )
 set( SOURCE_SDK_ROOT ${CMAKE_CURRENT_SOURCE_DIR} )
 
 # Add "cmake" to module path
