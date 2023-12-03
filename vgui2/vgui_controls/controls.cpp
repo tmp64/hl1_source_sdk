@@ -65,8 +65,21 @@ public:
 		return m_pEngineIface->Shutdown(full);
 	}
 
+	virtual int GetProportionalScaledValue(int normalizedValue)
+	{
+		// Custom implementation to allow custom proportional base.
+		return (int)(normalizedValue * GetProportionalScale());
+	}
+
+	virtual int GetProportionalNormalizedValue(int scaledValue)
+	{
+		// Custom implementation to allow custom proportional base.
+		return (int)(scaledValue / GetProportionalScale());
+	}
+
 	virtual float GetProportionalScale()
 	{
+		// Custom implementation to allow custom proportional base.
 		int wide, tall;
 		int propWide, propTall;
 		surface()->GetScreenSize(wide, tall);
@@ -74,14 +87,16 @@ public:
 		return (float)tall / (double)propTall;
 	}
 
-	virtual int GetProportionalScaledValue(int normalizedValue)
+	virtual int GetHDProportionalScaledValue(int normalizedValue)
 	{
-		return (int)(normalizedValue * GetProportionalScale());
+		// Use non-HD variant.
+		return GetProportionalScaledValue(normalizedValue);
 	}
 
-	virtual int GetProportionalNormalizedValue(int scaledValue)
+	virtual int GetHDProportionalNormalizedValue(int scaledValue)
 	{
-		return (int)(scaledValue / GetProportionalScale());
+		// Use non-HD variant.
+		return GetProportionalNormalizedValue(scaledValue);
 	}
 
 	// Methods from Source that are wrapped around GoldSrc methods

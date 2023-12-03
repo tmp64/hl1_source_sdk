@@ -238,7 +238,6 @@ public:
 	*	@return Timestamp, or 0 if the file could not be queried for information.
 	*/
 	virtual long			GetFileTime( const char *pFileName ) = 0;
-	virtual long			GetFileModificationTime(const char* pFileName) = 0;
 
 	/**
 	*	Converts the given file time to a string. The resulting string produces output as if the CRT function ctime were used.
@@ -534,6 +533,11 @@ public:
 	*	@see AddSearchPath
 	*/
 	virtual void			AddSearchPathNoWrite( const char *pPath, const char *pathID ) = 0;
+
+	// New in HL25 (linux build 9887)
+
+	//! @see GetFileModTime.
+	virtual long GetFileModificationTime(const char *pFileName) = 0;
 };
 
 // Steam3/Src compat
@@ -543,9 +547,6 @@ public:
 *	Interface name.
 */
 #define FILESYSTEM_INTERFACE_VERSION "VFileSystem009"
-
-//! Fake interface name for the engine filesystem.
-#define FILESYSTEM_INTERFACE_VERSION_ENGINE "HL1_SRC_SDK_EngineFilesystem"
 
 /** @} */
 

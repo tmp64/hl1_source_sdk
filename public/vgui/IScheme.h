@@ -47,6 +47,9 @@ public:
 
 	// colors
 	virtual Color GetColor(const char *colorName, Color defaultColor) = 0;
+
+	// New in HL25 (linux build 9890)
+	virtual vgui2::HFont GetFontEx(const char *fontName, bool proportional, bool hdProportional) = 0;
 };
 
 class ISchemeManager : public IBaseInterface
@@ -86,13 +89,17 @@ public:
 	// unload all schemes
 	virtual void Shutdown( bool full = true ) = 0;
 
-	//! @returns The proportional scale value that is used in GetProportionalScaledValue and GetProportionalNormalizedValue.
-	virtual float GetProportionalScale() = 0;
-
 	// gets the proportional coordinates for doing screen-size independant panel layouts
 	// use these for font, image and panel size scaling (they all use the pixel height of the display for scaling)
 	virtual int GetProportionalScaledValue( int normalizedValue ) = 0;
 	virtual int GetProportionalNormalizedValue( int scaledValue ) = 0;
+
+	// New in HL25 (linux build 9887)
+	virtual float GetProportionalScale() = 0;
+
+	// New in HL25 (linux build 9890)
+	virtual int GetHDProportionalScaledValue(int normalizedValue) = 0;
+	virtual int GetHDProportionalNormalizedValue(int scaledValue) = 0;
 };
 
 // GoldSrc: These are not available in GoldSrc and are wrappers for corresponding function above

@@ -198,7 +198,6 @@ public:
 	virtual void DrawSetTexture(int id) = 0;
 	virtual void DrawGetTextureSize(int id, int &wide, int &tall) = 0;
 	virtual void DrawTexturedRect(int x0, int y0, int x1, int y1) = 0;
-	virtual void DrawTexturedRectAdd(int x0, int y0, int x1, int y1) = 0;
 	virtual bool IsTextureIDValid(int id) = 0;
 
 	virtual int CreateNewTextureID( bool procedural = false ) = 0;
@@ -219,7 +218,6 @@ public:
 	virtual void FlashWindow(VPANEL panel, bool state) = 0;
 	virtual void SetTitle(VPANEL panel, const wchar_t *title) = 0;
 	virtual void SetAsToolBar(VPANEL panel, bool state) = 0;		// removes the window's task bar entry (for context menu's, etc.)
-	virtual void SetSupportsEsc(bool bSupportsEsc) = 0;
 
 	// windows stuff
 	virtual void CreatePopup(VPANEL panel, bool minimised, bool showTaskbarIcon = true, bool disabled = false, bool mouseInput = true , bool kbInput = true) = 0;
@@ -292,8 +290,6 @@ public:
 	//virtual bool IsFontAdditive(HFont font) = 0;
 	virtual void GetCharABCwide(HFont font, int ch, int &a, int &b, int &c) = 0;
 	virtual int GetCharacterWidth(HFont font, int ch) = 0;
-	virtual int GetFontBlur(HFont font) = 0;
-	virtual bool IsAdditive(HFont font) = 0;
 	virtual void GetTextSize(HFont font, const wchar_t *text, int &wide, int &tall) = 0;
 
 	// notify icons?!?
@@ -328,7 +324,6 @@ public:
 	// gets the base resolution used in proportional mode
 	// Use VGui_GetProportionalBase instead!!!
 	virtual void GetProportionalBase( int &width, int &height ) = 0;
-	virtual void SetProportionalBase( int width, int height ) = 0;
 
 	virtual void CalculateMouseVisible() = 0;
 	virtual bool NeedKBInput() = 0;
@@ -376,6 +371,17 @@ public:
 	virtual void RemoveBrowser( vgui2::VPANEL panel, IHTMLResponses *pBrowser ) = 0;
 
 	virtual IHTMLChromeController *AccessChromeHTMLController() = 0;
+
+	// New in HL25 (linux build 9887)
+	virtual void DrawTexturedRectAdd(int x0, int y0, int x1, int y1) = 0;
+	virtual void SetSupportsEsc(bool bSupportsEsc) = 0;
+	virtual int GetFontBlur(vgui2::HFont font) = 0;
+	virtual bool IsAdditive(vgui2::HFont font) = 0;
+	virtual void SetProportionalBase(int width, int height) = 0;
+
+	// New in HL25 (linux build 9890)
+	virtual void GetHDProportionalBase(int &width, int &height) = 0;
+	virtual void SetHDProportionalBase(int nWidth, int nHeight) = 0;
 
 	//These *might* work, but will likely cause crashes due to interface compatibility issues. - Solokiller
 	/*
