@@ -79,7 +79,7 @@ inline T AlignValue( T val, unsigned alignment )
 
 #ifndef FALSE
 #define FALSE 0
-#define TRUE (!FALSE)
+#define TRUE ((int)(!FALSE))
 #endif
 
 
